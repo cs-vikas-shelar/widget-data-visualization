@@ -8,12 +8,13 @@
     .module('cybersponse')
     .controller('dataVisualization100Ctrl', dataVisualization100Ctrl);
 
-  dataVisualization100Ctrl.$inject = ['$scope', 'widgetUtilityService', 'config', '$timeout', 'dataVisualizationService', 'Entity', 'dataVisualization_VIZ_MAP_TYPES'];
+  dataVisualization100Ctrl.$inject = ['$scope', 'widgetUtilityService', 'config', '$timeout', 'dataVisualizationService', 'Entity', 'dataVisualization_VIZ_MAP_TYPES', '$rootScope'];
 
-  function dataVisualization100Ctrl($scope, widgetUtilityService, config, $timeout, dataVisualizationService, Entity, dataVisualization_VIZ_MAP_TYPES) {
+  function dataVisualization100Ctrl($scope, widgetUtilityService, config, $timeout, dataVisualizationService, Entity, dataVisualization_VIZ_MAP_TYPES, $rootScope) {
 
     $scope.config = config;
     var _config = angular.copy(config);
+    $scope.themeId = $rootScope.theme.id;
 
     function _handleTranslations() {
       widgetUtilityService.checkTranslationMode($scope.$parent.model.type).then(function () {
@@ -29,7 +30,7 @@
       // Dispose already rendered chart if available
       $scope.myChart && echarts.dispose($scope.myChart);
       $scope.chartDom = angular.element(document.getElementById('eChart-' + $scope.config.wid))[0];
-      $scope.myChart = echarts.init($scope.chartDom, null, {
+      $scope.myChart = echarts.init($scope.chartDom, ('light' === $scope.themeId) ? null : 'dark', {
         renderer: 'canvas',
         useDirtyRect: false
       });
@@ -175,18 +176,32 @@
         textStyle: {
           overflow: 'break'
         },
+        tooltip: {
+          trigger: 'item',
+          renderMode: 'html',
+          backgroundColor: ('light' === $scope.themeId) ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+          borderColor: 'rgba(0, 0, 0, 1)',
+          borderWidth: 1,
+          textStyle: {
+            color: ('light' === $scope.themeId) ? 'rgba(0, 0, 0, 0.8)' : 'rgba(236, 232, 232, 0.8)'
+          }
+        },
         series: {
           type: 'sunburst',
           height: '80%',
           width: '80%',
           data: data.children,
+          clockwise: true,
           label: {
             rotate: 'tangential', // 'tangential', // 'radial'
             formatter: '{b}\n\n{c}',
             //position: 'inside',
-            overflow: 'breakAll', // 'brake',
-            ellipsis: '...'
-            // align: 'center'
+            width: 30,
+            overflow: 'truncate', // 'brake',
+            ellipsis: '..',
+            minMargin: 5,
+            // color: ('light' === $scope.themeId) ? '#000' : '#fff',
+            minAngle: '10' // If the data is less than 10 deg then it doesn't show text
           },
           labelLayout: { hideOverlap: true },
           // emphasis: {
@@ -226,7 +241,7 @@
                 {
                   itemStyle: {
                     borderColor: '#555',
-                    borderWidth: 4,
+                    borderWidth: 2,
                     gapWidth: 4
                   }
                 },
@@ -235,7 +250,7 @@
                   itemStyle: {
                     borderColorSaturation: 0.7,
                     gapWidth: 2,
-                    borderWidth: 2
+                    borderWidth: 1
                   }
                 },
                 {
@@ -304,20 +319,20 @@
         let dateToConvert, tempDate;
         // Convert date to Month Year format
         if(_config.heatMap[axis].dateFormat === '%b %y') {
-          dateToConvert = new Date(data[_config.heatMap[axis].field] * 1000);
+          dateToConvert = new Date(data[_config.heatMap[axis].field.name] * 1000);
           tempDate = dateToConvert.toLocaleString('default', { month: 'short' }).substring(0, 3) + ' ' + dateToConvert.getFullYear();
           if (heatMapConfig[axis].indexOf(tempDate) === -1) {
             heatMapConfig[axis].push(tempDate);
           }
         } else if (_config.heatMap[axis].dateFormat === '%b %e') {
           // Convert date to Month Day Format
-          dateToConvert = new Date(data[_config.heatMap[axis].field] * 1000);
+          dateToConvert = new Date(data[_config.heatMap[axis].field.name] * 1000);
           tempDate = dateToConvert.toLocaleString('default', { month: 'short' }).substring(0, 3) + ' ' + dateToConvert.getDate();
           if (heatMapConfig[axis].indexOf(tempDate) === -1) {
             heatMapConfig[axis].push(tempDate);
           }
         }
-        data[_config.heatMap[axis].field] = tempDate;
+        data[_config.heatMap[axis].field.name] = tempDate;
       });
     }
 
@@ -329,8 +344,8 @@
     */
     function _constructHeatmapDatetimeData(rawData) {
       const map = new Map();
-      let xAxisField = _config.heatMap.xAxis.field;
-      let yAxisField = _config.heatMap.yAxis.field;
+      let xAxisField = _config.heatMap.xAxis.field.name;
+      let yAxisField = _config.heatMap.yAxis.field.name;
 
       rawData.forEach((data) => {
           const key = `${data[xAxisField]}-${data[yAxisField]}`;
@@ -359,28 +374,28 @@
       entity.loadFields().then(function() {
         $scope.fields = entity.getFormFields();
         heatMapConfig.moduleName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
-        if ($scope.fields[_config.heatMap.xAxis.field] && ('picklist' === $scope.fields[_config.heatMap.xAxis.field].type)) {
-          ($scope.fields[_config.heatMap.xAxis.field].options).forEach(option => {
+        if ($scope.fields[_config.heatMap.xAxis.field.name] && (['picklist'].indexOf(_config.heatMap.xAxis.field.type) > -1)) {
+          ($scope.fields[_config.heatMap.xAxis.field.name].options).forEach(option => {
             heatMapConfig.xAxis.push(option.itemValue);
           });
-        } else if ($scope.fields[_config.heatMap.xAxis.field] && ('datetime' === $scope.fields[_config.heatMap.xAxis.field].type)) {
+        } else if ($scope.fields[_config.heatMap.xAxis.field.name] && ('datetime' === _config.heatMap.xAxis.field.type)) {
           _updateEpochToDate(rawData, heatMapConfig, 'xAxis');
         }
-        if ($scope.fields[_config.heatMap.yAxis.field] && ('picklist' === $scope.fields[_config.heatMap.yAxis.field].type)) {
-          ($scope.fields[_config.heatMap.yAxis.field].options).forEach(option => {
+        if ($scope.fields[_config.heatMap.yAxis.field.name] && (['picklist'].indexOf(_config.heatMap.yAxis.field.type) > -1)) {
+          ($scope.fields[_config.heatMap.yAxis.field.name].options).forEach(option => {
             heatMapConfig.yAxis.push(option.itemValue);
           });
-        } else if ($scope.fields[_config.heatMap.yAxis.field] && ('datetime' === $scope.fields[_config.heatMap.yAxis.field].type)) {
+        } else if ($scope.fields[_config.heatMap.yAxis.field.name] && ('datetime' === _config.heatMap.yAxis.field.type)) {
           _updateEpochToDate(rawData, heatMapConfig, 'yAxis');
         }
         let max = 0;
         let formedData = rawData;
-        if (_config.heatMap.xAxis.dateField || _config.heatMap.yAxis.dateField) {
+        if ([_config.heatMap.xAxis.field.type, _config.heatMap.yAxis.field.type].indexOf('picklist') > -1) {
           formedData = _constructHeatmapDatetimeData(rawData);
         }
         heatMapConfig.data = formedData.map(function(data) {
           max = data['total'] > max ? data['total'] : max;
-          return [heatMapConfig.xAxis.indexOf(data[_config.heatMap.xAxis.field]), heatMapConfig.yAxis.indexOf(data[_config.heatMap.yAxis.field]), data['total'] || '-'];
+          return [heatMapConfig.xAxis.indexOf(data[_config.heatMap.xAxis.field.name]), heatMapConfig.yAxis.indexOf(data[_config.heatMap.yAxis.field.name]), data['total'] || '-'];
         });
 
         $scope.option = {
