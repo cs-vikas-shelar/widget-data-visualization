@@ -30,7 +30,7 @@
       // Dispose already rendered chart if available
       $scope.myChart && echarts.dispose($scope.myChart);
       $scope.chartDom = angular.element(document.getElementById('eChart-' + $scope.config.wid))[0];
-      $scope.myChart = echarts.init($scope.chartDom, null, {
+      $scope.myChart = echarts.init($scope.chartDom, ('light' === $scope.themeId) ? null : 'dark', {
         renderer: 'canvas',
         useDirtyRect: false
       });
@@ -200,7 +200,7 @@
             overflow: 'truncate', // 'brake',
             ellipsis: '..',
             minMargin: 5,
-            color: ('light' === $scope.themeId) ? '#000' : '#fff',
+            // color: ('light' === $scope.themeId) ? '#000' : '#fff',
             minAngle: '10' // If the data is less than 10 deg then it doesn't show text
           },
           labelLayout: { hideOverlap: true },
