@@ -191,7 +191,7 @@
                         <label for="yAxisTimeScope" class="control-label">Y-axis Date Range<span class="text-danger">*</span></label>
                         <select name="yAxisTimeScope" id="yAxisTimeScope" class="form-control"
                             data-ng-options="dateRange.name as dateRange.title for dateRange in dateRanges"
-                            data-ng-model="config.heatMap.yAxis.timeScope" data-ng-required="'datetime' === config.heatMap.xAxis.field.type">
+                            data-ng-model="config.heatMap.yAxis.timeScope" data-ng-required="'datetime' === config.heatMap.yAxis.field.type">
                             <option value="">Select an Option</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.yAxisTimeScope"></div>
@@ -199,7 +199,7 @@
                     <div class="form-group" data-ng-class="{ 'has-error': editDataVisualizationForm.yAxisDateFormat.$invalid && editDataVisualizationForm.yAxisDateFormat.$touched }">
                         <label for="yAxisDateFormat" class="control-label">Y-axis Date Format<span class="text-danger">*</span></label>
                         <select name="yAxisDateFormat" id="yAxisDateFormat" class="form-control"
-                            data-ng-required="'datetime' === config.heatMap.xAxis.field.type"
+                            data-ng-required="'datetime' === config.heatMap.yAxis.field.type"
                             data-ng-model="config.heatMap.yAxis.dateFormat"
                             data-ng-options="dateFormat.name as dateFormat.title for dateFormat in dateFormatsC3">
                             <option value="">Select an Option</option>
