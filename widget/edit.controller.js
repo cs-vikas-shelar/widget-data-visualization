@@ -17,7 +17,6 @@
     $scope.dataVisualization_VIZ_MAP_TYPES = dataVisualization_VIZ_MAP_TYPES;
     $scope.loadAttributes = loadAttributes;
     $scope.onChangeModuleType = onChangeModuleType;
-    $scope.checkFieldType = checkFieldType;
     $scope.dateRanges = [{
       title: 'Monthly',
       name: 'month'
@@ -64,22 +63,9 @@
       });
     }
 
-    $scope.filterByPicklistOrTextType = function(field) {
-      return field.type === 'picklist' || field.type === 'text';
-    };
-
-    $scope.filterByPicklistOrDateType = function(field) {
-      return field.type === 'picklist' || field.type === 'datetime';
-    }
-
-    function checkFieldType(axis) {
-      if (axis) {
-        if ($scope.config.heatMap[axis]) {
-          let field = _.pick((_.filter($scope.fieldsArray, function(field) { return field.name === $scope.config.heatMap[axis].field }))[0], 'name', 'type');
-          $scope.config.heatMap[axis].dateField = ('datetime' === field.type) ? true : false;
-        } else {
-          $scope.config.heatMap[axis].dateField = false;
-        }
+    $scope.filterByFieldType = function(fieldTypes) {
+      return function(field) {
+        return fieldTypes.indexOf(field.type) > -1;
       }
     }
 

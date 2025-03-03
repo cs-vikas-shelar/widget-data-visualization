@@ -90,7 +90,7 @@
                     </span>
                 </label>
                 <select name="objectField" id="objectField" class="form-control"
-                    data-ng-options="field.name as field.title for field in fieldsArray | filter: { type: 'object' } | orderBy: 'title'"
+                    data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByFieldType(['object']) | orderBy: 'title'"
                     data-ng-model="config.objectField" required>
                     <option value="">Select an Option</option>
                 </select>
@@ -111,7 +111,7 @@
                             </span>
                         </label>
                         <select name="picklistField-{{ $index }}" id="picklistField-{{ $index }}" class="form-control"
-                            data-ng-options="field.name as field.title for field in fieldsArray | filter: { type: 'picklist' } | orderBy: 'title'"
+                            data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByFieldType(['picklist']) | orderBy: 'title'"
                             data-ng-model="config.sunTree.mappingLevel[$index]" required>
                             <option value="">Select an Option</option>
                         </select>
@@ -130,7 +130,7 @@
                         </span>
                     </label>
                     <select name="wordSource" id="wordSource" class="form-control"
-                        data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByPicklistOrTextType | orderBy: 'title'"
+                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'text']) | orderBy: 'title'"
                         data-ng-model="config.wordCloud.wordSource" required>
                         <option value="">Select an Option</option>
                     </select>
@@ -144,20 +144,20 @@
                     data-ng-if="modules && config.resource">
                     <label for="xAxis" class="control-label">X-axis<span class="text-danger">*</span></label>
                     <select name="xAxis" id="xAxis" class="form-control"
-                        data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByPicklistOrDateType | orderBy: 'title'"
-                        data-ng-model="config.heatMap.xAxis.field" data-ng-change="checkFieldType('xAxis')" required>
+                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title'"
+                        data-ng-model="config.heatMap.xAxis.field" required>
                         <option value="">Select an Option</option>
                     </select>
                     <div data-cs-messages="editDataVisualizationForm.xAxis"></div>
                 </div>
-                <div data-ng-if="config.heatMap.xAxis.dateField">
+                <div data-ng-if="'datetime' === config.heatMap.xAxis.field.type">
                     <div class="form-group"
                         data-ng-class="{ 'has-error': editDataVisualizationForm.xAxisTimeScope.$invalid && editDataVisualizationForm.xAxisTimeScope.$touched }"
                         data-ng-if="modules && config.resource">
                         <label for="xAxisTimeScope" class="control-label">X-axis Date Range<span class="text-danger">*</span></label>
                         <select name="xAxisTimeScope" id="xAxisTimeScope" class="form-control"
                             data-ng-options="dateRange.name as dateRange.title for dateRange in dateRanges"
-                            data-ng-model="config.heatMap.xAxis.timeScope" data-ng-required="config.heatMap.xAxis.dateField">
+                            data-ng-model="config.heatMap.xAxis.timeScope" data-ng-required="'datetime' === config.heatMap.xAxis.field.type">
                             <option value="">Select an Option</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.xAxisTimeScope"></div>
@@ -165,7 +165,7 @@
                     <div class="form-group" data-ng-class="{ 'has-error': editDataVisualizationForm.xAxisDateFormat.$invalid && editDataVisualizationForm.xAxisDateFormat.$touched }">
                         <label for="xAxisDateFormat" class="control-label">X-axis Date Format<span class="text-danger">*</span></label>
                         <select name="xAxisDateFormat" id="xAxisDateFormat" class="form-control"
-                            data-ng-required="config.heatMap.xAxis.dateField"
+                            data-ng-required="'datetime' === config.heatMap.xAxis.field.type"
                             data-ng-model="config.heatMap.xAxis.dateFormat"
                             data-ng-options="dateFormat.name as dateFormat.title for dateFormat in dateFormatsC3">
                             <option value="">Select an Option</option>
@@ -178,20 +178,20 @@
                     data-ng-if="modules && config.resource">
                     <label for="yAxis" class="control-label">Y-axis<span class="text-danger">*</span></label>
                     <select name="yAxis" id="yAxis" class="form-control"
-                        data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByPicklistOrDateType | orderBy: 'title'"
-                        data-ng-model="config.heatMap.yAxis.field" data-ng-change="checkFieldType('yAxis')" required>
+                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title'"
+                        data-ng-model="config.heatMap.yAxis.field" required>
                         <option value="">Select an Option</option>
                     </select>
                     <div data-cs-messages="editDataVisualizationForm.yAxis"></div>
                 </div>
-                <div data-ng-if="config.heatMap.yAxis.dateField">
+                <div data-ng-if="'datetime' === config.heatMap.yAxis.field.type">
                     <div class="form-group"
                         data-ng-class="{ 'has-error': editDataVisualizationForm.yAxisTimeScope.$invalid && editDataVisualizationForm.yAxisTimeScope.$touched }"
                         data-ng-if="modules && config.resource">
                         <label for="yAxisTimeScope" class="control-label">Y-axis Date Range<span class="text-danger">*</span></label>
                         <select name="yAxisTimeScope" id="yAxisTimeScope" class="form-control"
                             data-ng-options="dateRange.name as dateRange.title for dateRange in dateRanges"
-                            data-ng-model="config.heatMap.yAxis.timeScope" data-ng-required="config.heatMap.yAxis.dateField">
+                            data-ng-model="config.heatMap.yAxis.timeScope" data-ng-required="'datetime' === config.heatMap.xAxis.field.type">
                             <option value="">Select an Option</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.yAxisTimeScope"></div>
@@ -199,7 +199,7 @@
                     <div class="form-group" data-ng-class="{ 'has-error': editDataVisualizationForm.yAxisDateFormat.$invalid && editDataVisualizationForm.yAxisDateFormat.$touched }">
                         <label for="yAxisDateFormat" class="control-label">Y-axis Date Format<span class="text-danger">*</span></label>
                         <select name="yAxisDateFormat" id="yAxisDateFormat" class="form-control"
-                            data-ng-required="config.heatMap.yAxis.dateField"
+                            data-ng-required="'datetime' === config.heatMap.xAxis.field.type"
                             data-ng-model="config.heatMap.yAxis.dateFormat"
                             data-ng-options="dateFormat.name as dateFormat.title for dateFormat in dateFormatsC3">
                             <option value="">Select an Option</option>

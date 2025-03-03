@@ -113,31 +113,31 @@
                         queryObject.aggregates.push({
                             operator: 'groupby',
                             alias: 'name',
-                            field: config.wordCloud.wordSource + '.itemValue'
+                            field: config.wordCloud.wordSource.name + (['picklist'].indexOf(config.wordCloud.wordSource.type) > -1 ? '.itemValue' : '')
                         });
                     }
                     break;
                 case dataVisualization_VIZ_MAP_TYPES.HEAT_MAP:
                     {
-                        if (!config.heatMap.xAxis.dateField) {
+                        if (['picklist'].indexOf(config.heatMap.xAxis.field.type) > -1) {
                             queryObject.sort.push({
-                                field: config.heatMap.xAxis.field + '.orderIndex',
+                                field: config.heatMap.xAxis.field.name + '.orderIndex',
                                 direction: 'ASC'
                             });
                             queryObject.aggregates.push({
                                 operator: 'groupby',
                                 alias: 'orderIndex',
-                                field: config.heatMap.xAxis.field + '.orderIndex'
+                                field: config.heatMap.xAxis.field.name + '.orderIndex'
                             });
-                        } else if (!config.heatMap.yAxis.dateField) {
+                        } else if (['picklist'].indexOf(config.heatMap.yAxis.field.type) > -1) {
                             queryObject.sort.push({
-                                field: config.heatMap.yAxis.field + '.orderIndex',
+                                field: config.heatMap.yAxis.field.name + '.orderIndex',
                                 direction: 'ASC'
                             });
                             queryObject.aggregates.push({
                                 operator: 'groupby',
                                 alias: 'orderIndex',
-                                field: config.heatMap.yAxis.field + '.orderIndex'
+                                field: config.heatMap.yAxis.field.name + '.orderIndex'
                             });
                         }
                         queryObject.aggregates.push({
@@ -147,13 +147,13 @@
                         });
                         queryObject.aggregates.push({
                             operator: 'groupby',
-                            alias: config.heatMap.xAxis.field,
-                            field: config.heatMap.xAxis.field + (config.heatMap.xAxis.dateField ? '' : '.itemValue')
+                            alias: config.heatMap.xAxis.field.name,
+                            field: config.heatMap.xAxis.field.name + (['picklist'].indexOf(config.heatMap.xAxis.field.type) > -1 ? '.itemValue' : '')
                         });
                         queryObject.aggregates.push({
                             operator: 'groupby',
-                            alias: config.heatMap.yAxis.field,
-                            field: config.heatMap.yAxis.field + (config.heatMap.yAxis.dateField ? '' : '.itemValue')
+                            alias: config.heatMap.yAxis.field.name,
+                            field: config.heatMap.yAxis.field.name + (['picklist'].indexOf(config.heatMap.yAxis.field.type) > -1 ? '.itemValue' : '')
                         });
                     }
                     break;
