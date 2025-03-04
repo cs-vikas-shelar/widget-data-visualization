@@ -130,7 +130,7 @@
                         </span>
                     </label>
                     <select name="wordSource" id="wordSource" class="form-control"
-                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'text']) | orderBy: 'title'"
+                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'text']) | orderBy: 'title' track by field.name"
                         data-ng-model="config.wordCloud.wordSource" required>
                         <option value="">Select an Option</option>
                     </select>
@@ -144,7 +144,7 @@
                     data-ng-if="modules && config.resource">
                     <label for="xAxis" class="control-label">X-axis<span class="text-danger">*</span></label>
                     <select name="xAxis" id="xAxis" class="form-control"
-                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title'"
+                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title' track by field.name"
                         data-ng-model="config.heatMap.xAxis.field" required>
                         <option value="">Select an Option</option>
                     </select>
@@ -178,7 +178,7 @@
                     data-ng-if="modules && config.resource">
                     <label for="yAxis" class="control-label">Y-axis<span class="text-danger">*</span></label>
                     <select name="yAxis" id="yAxis" class="form-control"
-                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title'"
+                        data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title' track by field.name"
                         data-ng-model="config.heatMap.yAxis.field" required>
                         <option value="">Select an Option</option>
                     </select>
