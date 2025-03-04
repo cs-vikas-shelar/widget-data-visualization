@@ -13,6 +13,7 @@
             data-ng-class="(page === 'dashboard' || page === 'reporting') ? 'widget-dashboard-actions-width' : 'widget-actions-width'">
             <span class="fa btn widget-action-icon btn-sm pull-right" data-ng-click="collapsed = !collapsed"
                 data-ng-class="{'fa-caret-up': !collapsed, 'fa-caret-down': collapsed}"></span>
+            <span class="fa btn btn-sm fa-refresh pull-right" data-ng-click="init()"></span>
         </div>
     </div>
     <div data-ng-hide="collapsed">

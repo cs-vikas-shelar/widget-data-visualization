@@ -75,31 +75,35 @@
                 case dataVisualization_VIZ_MAP_TYPES.SUNBURST:
                 case dataVisualization_VIZ_MAP_TYPES.TREE_MAP: 
                 {
-                    queryObject.sort.push({
-                        field: config.sunTree.mappingLevel[0] + '.orderIndex',
-                        direction: 'ASC'
-                    });
+                    if (['picklist'].indexOf(config.sunTree.mappingLevel[0].type) > -1) {
+                        queryObject.sort.push({
+                            field: config.sunTree.mappingLevel[0].name + '.orderIndex',
+                            direction: 'ASC'
+                        });
+                        queryObject.aggregates.push({
+                            operator: 'groupby',
+                            alias: 'orderIndex',
+                            field: config.sunTree.mappingLevel[0].name + '.orderIndex'
+                        });
+                    }
                     queryObject.aggregates.push({
                         operator: 'count',
                         field: '*',
                         alias: 'total'
                     });
-                    queryObject.aggregates.push({
-                        operator: 'groupby',
-                        alias: 'orderIndex',
-                        field: config.sunTree.mappingLevel[0] + '.orderIndex'
-                    });
                     (config.sunTree.mappingLevel).forEach((level, index) => {
                         queryObject.aggregates.push({
                             operator: 'groupby',
-                            alias: level,
-                            field: level + '.itemValue'
+                            alias: level.name,
+                            field: level.name + (['picklist'].indexOf(level.type) > -1 ? '.itemValue' : '.name')
                         });
-                        queryObject.aggregates.push({
-                            operator: 'groupby',
-                            alias: 'l' + index + 'Color',
-                            field: level + '.color'
-                        });
+                        if (['picklist'].indexOf(config.sunTree.mappingLevel[0].type) > -1) {
+                            queryObject.aggregates.push({
+                                operator: 'groupby',
+                                alias: 'l' + index + 'Color',
+                                field: level.name + '.color'
+                            });
+                        }
                     });
                 }
                     break;

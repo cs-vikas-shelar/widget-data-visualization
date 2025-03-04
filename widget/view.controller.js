@@ -8,9 +8,9 @@
     .module('cybersponse')
     .controller('dataVisualization100Ctrl', dataVisualization100Ctrl);
 
-  dataVisualization100Ctrl.$inject = ['$scope', 'widgetUtilityService', 'config', '$timeout', 'dataVisualizationService', 'Entity', 'dataVisualization_VIZ_MAP_TYPES', '$rootScope'];
+  dataVisualization100Ctrl.$inject = ['$scope', 'widgetUtilityService', 'config', '$timeout', 'dataVisualizationService', 'Entity', 'dataVisualization_VIZ_MAP_TYPES', '$rootScope', '_'];
 
-  function dataVisualization100Ctrl($scope, widgetUtilityService, config, $timeout, dataVisualizationService, Entity, dataVisualization_VIZ_MAP_TYPES, $rootScope) {
+  function dataVisualization100Ctrl($scope, widgetUtilityService, config, $timeout, dataVisualizationService, Entity, dataVisualization_VIZ_MAP_TYPES, $rootScope, _) {
 
     $scope.config = config;
     var _config = angular.copy(config);
@@ -131,8 +131,9 @@
          formedData = data;
       } else {
         // Form Data for Map Rendering
+        let levelKeys = _.pluck($scope.config.sunTree.mappingLevel, 'name');
         formedData = inputJSON.mapData.reduce((obj, record) => {
-          obj = _createNestedObject(obj, record, $scope.config.sunTree.mappingLevel);
+          obj = _createNestedObject(obj, record, levelKeys);
 
           return obj;
         }, {});
@@ -404,12 +405,22 @@
           },
           grid: {
             height: '50%',
-            top: '10%'
+            top: '10%',
+            left: '15%'
           },
           xAxis: {
             type: 'category',
             data: heatMapConfig.xAxis,
             splitArea: {
+              show: true
+            },
+            axisLabel: {
+              rotate: '45',
+              width: '50',
+              overflow: 'truncate',
+              ellipsis: '..'
+            },
+            tooltip: {
               show: true
             }
           },
@@ -417,6 +428,15 @@
             type: 'category',
             data: heatMapConfig.yAxis,
             splitArea: {
+              show: true
+            },
+            axisLabel: {
+              rotate: '45',
+              width: '50',
+              overflow: 'truncate',
+              ellipsis: '..'
+            },
+            tooltip: {
               show: true
             }
           },

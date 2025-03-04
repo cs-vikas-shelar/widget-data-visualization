@@ -111,7 +111,7 @@
                             </span>
                         </label>
                         <select name="picklistField-{{ $index }}" id="picklistField-{{ $index }}" class="form-control"
-                            data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByFieldType(['picklist']) | orderBy: 'title'"
+                            data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'lookup']) | orderBy: 'title' track by field.name"
                             data-ng-model="config.sunTree.mappingLevel[$index]" required>
                             <option value="">Select an Option</option>
                         </select>
