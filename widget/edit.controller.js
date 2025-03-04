@@ -8,12 +8,13 @@
     .module('cybersponse')
     .controller('editDataVisualization100Ctrl', editDataVisualization100Ctrl);
 
-  editDataVisualization100Ctrl.$inject = ['$scope', '$uibModalInstance', 'config', 'widgetUtilityService', '$timeout', 'appModulesService', 'Entity', 'dataVisualizationService', 'CommonUtils', 'dataVisualization_VIZ_MAP_TYPES', '_'];
+  editDataVisualization100Ctrl.$inject = ['$scope', '$state', '$uibModalInstance', 'config', 'widgetUtilityService', '$timeout', 'appModulesService', 'Entity', 'dataVisualizationService', 'CommonUtils', 'dataVisualization_VIZ_MAP_TYPES', '_'];
 
-  function editDataVisualization100Ctrl($scope, $uibModalInstance, config, widgetUtilityService, $timeout, appModulesService, Entity, dataVisualizationService, CommonUtils, dataVisualization_VIZ_MAP_TYPES, _) {
+  function editDataVisualization100Ctrl($scope, $state, $uibModalInstance, config, widgetUtilityService, $timeout, appModulesService, Entity, dataVisualizationService, CommonUtils, dataVisualization_VIZ_MAP_TYPES, _) {
     $scope.cancel = cancel;
     $scope.save = save;
     $scope.config = config;
+    $scope.page = $state.params.page;
     $scope.dataVisualization_VIZ_MAP_TYPES = dataVisualization_VIZ_MAP_TYPES;
     $scope.loadAttributes = loadAttributes;
     $scope.onChangeModuleType = onChangeModuleType;
