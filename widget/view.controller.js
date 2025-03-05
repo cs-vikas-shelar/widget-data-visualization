@@ -169,7 +169,8 @@
       else if ($scope.config.vizType === dataVisualization_VIZ_MAP_TYPES.TREE_MAP) {
        target.children.push({
          name: basePath,
-         value: source.$count
+         value: source.$count,
+         itemStyle: source.$itemStyle
        });
       }
     }
