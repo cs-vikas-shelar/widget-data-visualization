@@ -26,7 +26,7 @@
             data-ng-class="{ 'has-error':  editDataVisualizationForm.vizType.$invalid && editDataVisualizationForm.vizType.$touched }">
             <label for="vizType" class="control-label">Visualization Type<span class="text-danger">*</span></label>
             <select name="vizType" id="vizType" class="form-control" required data-ng-model="config.vizType"
-                data-ng-options="viz.type as viz.title for viz in config.vizList | orderBy: 'title'">
+                data-ng-options="viz.type as viz.title for viz in vizList | orderBy: 'title'">
                 <option value="">Select an option</option>
             </select>
             <div data-cs-messages="editDataVisualizationForm.vizType"></div>
