@@ -119,7 +119,7 @@
         }
         current[record[key]]['$count'] = current[record[key]]['$count'] ? current[record[key]]['$count'] + record.total : record.total;
         current = current[record[key]]; 
-        current.itemStyle = {
+        current['$itemStyle'] = {
           color: record.l0Color
         };
       }
@@ -149,24 +149,22 @@
 
     function convert(source, target, basePath) {
       for (let key in source) {
-        if ('itemStyle' === key) {
-          target[key] = source[key];
+        let path = basePath ? basePath + ' > ' + key : key;
+        if (!key.match(/^\$/)) {
+          target.children = target.children || [];
+          const child = {
+            name: path
+          };
+          target.children.push(child);
+          convert(source[key], child, path);
         } else {
-          let path = basePath ? basePath + ' > ' + key : key;
-          if (!key.match(/^\$/)) {
-            target.children = target.children || [];
-            const child = {
-              name: path
-            };
-            target.children.push(child);
-            convert(source[key], child, path);
-          } else {
-            target.value = source.$count || 0;
-          }
+          target.value = source.$count || 0;
+          target.itemStyle = source.$itemStyle;
         }
       }
       if (!target.children) {
         target.value = source.$count || 0;
+        target.itemStyle = source.$itemStyle;
       }
       else if ($scope.config.vizType === dataVisualization_VIZ_MAP_TYPES.TREE_MAP) {
        target.children.push({
@@ -182,12 +180,13 @@
       };
       convert(rawData, data, '');
       data.children = data.children.filter(children => children.name !== '');
+      let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
       let levelLabels = _.pluck(_.filter($scope.fields, function(field) {
-        return (_.pluck($scope.config.sunTree.mappingLevel, 'type')).indexOf(field.type) > -1;
-      })[0], 'title');
+        return (mappingArray).indexOf(field.name) > -1;
+      }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
       $scope.option = {
         textStyle: {
-          overflow: 'break',
+          overflow: 'break'
         },
         tooltip: {
           formatter: function (info) {
@@ -233,7 +232,7 @@
             ellipsis: '..',
             minMargin: 5,
             // color: ('light' === $scope.themeId) ? '#000' : '#fff',
-            minAngle: '10', // If the data is less than 10 deg then it doesn't show text
+            minAngle: '10' // If the data is less than 10 deg then it doesn't show text
           },
           labelLayout: { hideOverlap: true },
           // emphasis: {
@@ -246,7 +245,7 @@
           //     formatter: '\n{b}\n\n{c}'
           //   }
           // }
-        },
+        }
       };
 
       $scope.option && $scope.myChart.setOption($scope.option);
@@ -259,9 +258,10 @@
       };
       convert(rawData, data, '');
       data.children = data.children.filter(children => children.name !== '');
+      let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
       let levelLabels = _.pluck(_.filter($scope.fields, function(field) {
-        return (_.pluck($scope.config.sunTree.mappingLevel, 'type')).indexOf(field.type) > -1;
-      })[0], 'title');
+        return (mappingArray).indexOf(field.name) > -1;
+      }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
       $scope.myChart.setOption(
         ($scope.option = {
           tooltip: {
