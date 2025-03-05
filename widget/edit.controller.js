@@ -84,7 +84,7 @@
       }
 
       dataVisualizationService.loadVisualizationType().then(function (response) {
-        $scope.config.vizList = response.data.vizTypes;
+        $scope.vizList = response.data.vizTypes;
       });
       appModulesService.load(true).then(function (modules) {
         $scope.modules = modules;

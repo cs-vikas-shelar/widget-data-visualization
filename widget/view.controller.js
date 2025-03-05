@@ -15,6 +15,8 @@
     $scope.config = config;
     var _config = angular.copy(config);
     $scope.themeId = $rootScope.theme.id;
+    var entity = new Entity($scope.config.resource);
+    var resourceName;
 
     function _handleTranslations() {
       widgetUtilityService.checkTranslationMode($scope.$parent.model.type).then(function () {
@@ -117,6 +119,9 @@
         }
         current[record[key]]['$count'] = current[record[key]]['$count'] ? current[record[key]]['$count'] + record.total : record.total;
         current = current[record[key]]; 
+        current.itemStyle = {
+          color: record.l0Color
+        };
       }
       return obj;
     }
@@ -144,16 +149,20 @@
 
     function convert(source, target, basePath) {
       for (let key in source) {
-        let path = basePath ? basePath + ' > ' + key : key;
-        if (!key.match(/^\$/)) {
-          target.children = target.children || [];
-          const child = {
-            name: path
-          };
-          target.children.push(child);
-          convert(source[key], child, path);
+        if ('itemStyle' === key) {
+          target[key] = source[key];
         } else {
-          target.value = source.$count || 0;
+          let path = basePath ? basePath + ' > ' + key : key;
+          if (!key.match(/^\$/)) {
+            target.children = target.children || [];
+            const child = {
+              name: path
+            };
+            target.children.push(child);
+            convert(source[key], child, path);
+          } else {
+            target.value = source.$count || 0;
+          }
         }
       }
       if (!target.children) {
@@ -173,18 +182,40 @@
       };
       convert(rawData, data, '');
       data.children = data.children.filter(children => children.name !== '');
+      let levelLabels = _.pluck(_.filter($scope.fields, function(field) {
+        return (_.pluck($scope.config.sunTree.mappingLevel, 'type')).indexOf(field.type) > -1;
+      })[0], 'title');
       $scope.option = {
         textStyle: {
-          overflow: 'break'
+          overflow: 'break',
         },
         tooltip: {
-          trigger: 'item',
+          formatter: function (info) {
+            let segmentValue = info.value;
+            let levelValues = info.name.split(' > ');
+            let basicTemplateArray = [`
+              <div class='display-flex'>
+                <div class='margin-right-25'>
+                  <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
+                  <div>`];
+            levelValues.forEach(function (value, index) {
+              basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+            });
+            basicTemplateArray.push(`</div></div>`);
+            basicTemplateArray.push(`
+              <div>
+                <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
+                <div class="font-size-25 font-bolder"> ${segmentValue}</div>
+              </div>
+            </div>`);
+            return basicTemplateArray.join('');
+          },
           renderMode: 'html',
-          backgroundColor: ('light' === $scope.themeId) ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+          backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
           borderColor: 'rgba(0, 0, 0, 1)',
           borderWidth: 1,
           textStyle: {
-            color: ('light' === $scope.themeId) ? 'rgba(0, 0, 0, 0.8)' : 'rgba(236, 232, 232, 0.8)'
+            color: 'light' === $scope.themeId ? 'rgba(0, 0, 0, 0.8)' : 'rgba(236, 232, 232, 0.8)'
           }
         },
         series: {
@@ -202,7 +233,7 @@
             ellipsis: '..',
             minMargin: 5,
             // color: ('light' === $scope.themeId) ? '#000' : '#fff',
-            minAngle: '10' // If the data is less than 10 deg then it doesn't show text
+            minAngle: '10', // If the data is less than 10 deg then it doesn't show text
           },
           labelLayout: { hideOverlap: true },
           // emphasis: {
@@ -215,7 +246,7 @@
           //     formatter: '\n{b}\n\n{c}'
           //   }
           // }
-        }
+        },
       };
 
       $scope.option && $scope.myChart.setOption($scope.option);
@@ -228,12 +259,43 @@
       };
       convert(rawData, data, '');
       data.children = data.children.filter(children => children.name !== '');
+      let levelLabels = _.pluck(_.filter($scope.fields, function(field) {
+        return (_.pluck($scope.config.sunTree.mappingLevel, 'type')).indexOf(field.type) > -1;
+      })[0], 'title');
       $scope.myChart.setOption(
         ($scope.option = {
-          tooltip: {},
+          tooltip: {
+            formatter: function (info) {
+              let segmentValue = info.value;
+              let levelValues = info.name.split(' > ');
+              let basicTemplateArray = [`
+                <div class='display-flex'>
+                  <div class='margin-right-25'>
+                    <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
+                    <div>`];
+              levelValues.forEach(function (value, index) {
+                basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+              });
+              basicTemplateArray.push(`</div></div>`);
+              basicTemplateArray.push(`
+                <div>
+                  <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
+                  <div class="font-size-25 font-bolder"> ${segmentValue}</div>
+                </div>
+              </div>`);
+              return basicTemplateArray.join('');
+            },
+            renderMode: 'html',
+            backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+            borderColor: 'rgba(0, 0, 0, 1)',
+            borderWidth: 1,
+            textStyle: {
+              color: 'light' === $scope.themeId ? 'rgba(0, 0, 0, 0.8)' : 'rgba(236, 232, 232, 0.8)'
+            }
+          },
           series: [
             {
-              name: 'option',
+              name: 'Base',
               type: 'treemap',
               visibleMin: 300,
               data: data.children,
@@ -277,7 +339,7 @@
       // Configure the chart
       $scope.option = {
         title: {
-          text: $scope.config.title,
+          text: resourceName,
           left: 'center'
         },
         tooltip: {
@@ -371,104 +433,100 @@
         yAxis: [],
         data: []
       };
-      let entity = new Entity($scope.config.resource);
-      entity.loadFields().then(function() {
-        $scope.fields = entity.getFormFields();
-        heatMapConfig.moduleName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
-        if ($scope.fields[_config.heatMap.xAxis.field.name] && (['picklist'].indexOf(_config.heatMap.xAxis.field.type) > -1)) {
-          ($scope.fields[_config.heatMap.xAxis.field.name].options).forEach(option => {
-            heatMapConfig.xAxis.push(option.itemValue);
-          });
-        } else if ($scope.fields[_config.heatMap.xAxis.field.name] && ('datetime' === _config.heatMap.xAxis.field.type)) {
-          _updateEpochToDate(rawData, heatMapConfig, 'xAxis');
-        }
-        if ($scope.fields[_config.heatMap.yAxis.field.name] && (['picklist'].indexOf(_config.heatMap.yAxis.field.type) > -1)) {
-          ($scope.fields[_config.heatMap.yAxis.field.name].options).forEach(option => {
-            heatMapConfig.yAxis.push(option.itemValue);
-          });
-        } else if ($scope.fields[_config.heatMap.yAxis.field.name] && ('datetime' === _config.heatMap.yAxis.field.type)) {
-          _updateEpochToDate(rawData, heatMapConfig, 'yAxis');
-        }
-        let max = 0;
-        let formedData = rawData;
-        if ([_config.heatMap.xAxis.field.type, _config.heatMap.yAxis.field.type].indexOf('picklist') > -1) {
-          formedData = _constructHeatmapDatetimeData(rawData);
-        }
-        heatMapConfig.data = formedData.map(function(data) {
-          max = data['total'] > max ? data['total'] : max;
-          return [heatMapConfig.xAxis.indexOf(data[_config.heatMap.xAxis.field.name]), heatMapConfig.yAxis.indexOf(data[_config.heatMap.yAxis.field.name]), data['total'] || '-'];
+      heatMapConfig.moduleName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
+      if ($scope.fields[_config.heatMap.xAxis.field.name] && (['picklist'].indexOf(_config.heatMap.xAxis.field.type) > -1)) {
+        ($scope.fields[_config.heatMap.xAxis.field.name].options).forEach(option => {
+          heatMapConfig.xAxis.push(option.itemValue);
         });
+      } else if ($scope.fields[_config.heatMap.xAxis.field.name] && ('datetime' === _config.heatMap.xAxis.field.type)) {
+        _updateEpochToDate(rawData, heatMapConfig, 'xAxis');
+      }
+      if ($scope.fields[_config.heatMap.yAxis.field.name] && (['picklist'].indexOf(_config.heatMap.yAxis.field.type) > -1)) {
+        ($scope.fields[_config.heatMap.yAxis.field.name].options).forEach(option => {
+          heatMapConfig.yAxis.push(option.itemValue);
+        });
+      } else if ($scope.fields[_config.heatMap.yAxis.field.name] && ('datetime' === _config.heatMap.yAxis.field.type)) {
+        _updateEpochToDate(rawData, heatMapConfig, 'yAxis');
+      }
+      let max = 0;
+      let formedData = rawData;
+      if ([_config.heatMap.xAxis.field.type, _config.heatMap.yAxis.field.type].indexOf('picklist') > -1) {
+        formedData = _constructHeatmapDatetimeData(rawData);
+      }
+      heatMapConfig.data = formedData.map(function(data) {
+        max = data['total'] > max ? data['total'] : max;
+        return [heatMapConfig.xAxis.indexOf(data[_config.heatMap.xAxis.field.name]), heatMapConfig.yAxis.indexOf(data[_config.heatMap.yAxis.field.name]), data['total'] || '-'];
+      });
 
-        $scope.option = {
+      $scope.option = {
+        tooltip: {
+          position: 'top'
+        },
+        grid: {
+          height: '50%',
+          top: '10%',
+          left: '15%'
+        },
+        xAxis: {
+          type: 'category',
+          data: heatMapConfig.xAxis,
+          splitArea: {
+            show: true
+          },
+          axisLabel: {
+            rotate: '45',
+            width: '50',
+            overflow: 'truncate',
+            ellipsis: '..'
+          },
           tooltip: {
-            position: 'top'
+            show: true
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: heatMapConfig.yAxis,
+          splitArea: {
+            show: true
           },
-          grid: {
-            height: '50%',
-            top: '10%',
-            left: '15%'
+          axisLabel: {
+            rotate: '45',
+            width: '50',
+            overflow: 'truncate',
+            ellipsis: '..'
           },
-          xAxis: {
-            type: 'category',
-            data: heatMapConfig.xAxis,
-            splitArea: {
+          tooltip: {
+            show: true
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: max,
+          calculable: true,
+          orient: 'horizontal',
+          left: 'center',
+          bottom: '15%'
+        },
+        series: [
+          {
+            name: heatMapConfig.moduleName,
+            type: 'heatmap',
+            data: heatMapConfig.data,
+            label: {
               show: true
             },
-            axisLabel: {
-              rotate: '45',
-              width: '50',
-              overflow: 'truncate',
-              ellipsis: '..'
-            },
-            tooltip: {
-              show: true
-            }
-          },
-          yAxis: {
-            type: 'category',
-            data: heatMapConfig.yAxis,
-            splitArea: {
-              show: true
-            },
-            axisLabel: {
-              rotate: '45',
-              width: '50',
-              overflow: 'truncate',
-              ellipsis: '..'
-            },
-            tooltip: {
-              show: true
-            }
-          },
-          visualMap: {
-            min: 0,
-            max: max,
-            calculable: true,
-            orient: 'horizontal',
-            left: 'center',
-            bottom: '15%'
-          },
-          series: [
-            {
-              name: heatMapConfig.moduleName,
-              type: 'heatmap',
-              data: heatMapConfig.data,
-              label: {
-                show: true
-              },
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
             }
-          ]
-        };
+          }
+        ]
+      };
 
-        $scope.option && $scope.myChart.setOption($scope.option);
-        $scope.generatingChart = false;
-      });
+      $scope.option && $scope.myChart.setOption($scope.option);
+      $scope.generatingChart = false;
     }
 
     function renderSelectedChart(formedData) {
@@ -501,7 +559,11 @@
         $timeout(function() {
           window.AMDLoader = loader;
           window.define = define;
-          initializeChart();
+          entity.loadFields().then(function() {
+            resourceName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
+            $scope.fields = entity.getFormFields();
+            initializeChart();
+          });
         }, 1000);
       });
     }
