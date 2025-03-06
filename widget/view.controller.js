@@ -132,7 +132,7 @@
       }
 
       let formedData;
-      if ([dataVisualization_VIZ_MAP_TYPES.WORD_CLOUD, dataVisualization_VIZ_MAP_TYPES.HEAT_MAP].indexOf(config.vizType) > -1) {
+      if (([dataVisualization_VIZ_MAP_TYPES.WORD_CLOUD, dataVisualization_VIZ_MAP_TYPES.HEAT_MAP].indexOf(config.vizType) > -1) || ('Single Module' === _config.moduleType)) {
          formedData = data;
       } else {
         // Form Data for Map Rendering
@@ -175,41 +175,55 @@
       }
     }
 
+    function _tooltipRenderer(info, levelLabels) {
+      let segmentValue = info.value;
+      let levelValues = info.name.split(' > ');
+      let basicTemplateArray = [`
+        <div class='display-flex'>
+          <div class='margin-right-25'>
+            <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
+            <div>`];
+      levelValues.forEach(function (value, index) {
+        basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+      });
+      basicTemplateArray.push(`</div></div>`);
+      basicTemplateArray.push(`
+        <div>
+          <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
+          <div class="font-size-25 font-bolder"> ${segmentValue}</div>
+        </div>
+      </div>`);
+      return basicTemplateArray.join('');
+    }
+
     function renderSunburst(rawData) {
       const data = {
         children: []
       };
-      convert(rawData, data, '');
-      data.children = data.children.filter(children => children.name !== '');
-      let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
-      let levelLabels = _.pluck(_.filter($scope.fields, function(field) {
-        return (mappingArray).indexOf(field.name) > -1;
-      }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
+      let levelLabels;
+      if ('Across Modules' === _config.moduleType) {
+        convert(rawData, data, '');
+        data.children = data.children.filter(children => children.name !== '');
+        let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
+        levelLabels = _.pluck(_.filter($scope.fields, function(field) {
+          return (mappingArray).indexOf(field.name) > -1;
+        }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
+      } else {
+        data.children = rawData.children;
+      }
       $scope.option = {
         textStyle: {
           overflow: 'break'
         },
         tooltip: {
           formatter: function (info) {
-            let segmentValue = info.value;
-            let levelValues = info.name.split(' > ');
-            let basicTemplateArray = [`
-              <div class='display-flex'>
-                <div class='margin-right-25'>
-                  <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
-                  <div>`];
-            levelValues.forEach(function (value, index) {
-              basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
-            });
-            basicTemplateArray.push(`</div></div>`);
-            basicTemplateArray.push(`
-              <div>
-                <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
-                <div class="font-size-25 font-bolder"> ${segmentValue}</div>
-              </div>
-            </div>`);
-            return basicTemplateArray.join('');
+            if ('Across Modules' === _config.moduleType) {
+              return _tooltipRenderer(info, levelLabels);
+            } else {
+              return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} ${info.value}`;
+            }
           },
+          position: 'inside',
           renderMode: 'html',
           backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
           borderColor: 'rgba(0, 0, 0, 1)',
@@ -257,35 +271,28 @@
       const data = {
         children: []
       };
-      convert(rawData, data, '');
-      data.children = data.children.filter(children => children.name !== '');
-      let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
-      let levelLabels = _.pluck(_.filter($scope.fields, function(field) {
-        return (mappingArray).indexOf(field.name) > -1;
-      }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
+      let levelLabels;
+      if ('Across Modules' === _config.moduleType) {
+        convert(rawData, data, '');
+        data.children = data.children.filter(children => children.name !== '');
+        let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
+        levelLabels = _.pluck(_.filter($scope.fields, function(field) {
+          return (mappingArray).indexOf(field.name) > -1;
+        }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
+      } else {
+        data.children = rawData.children;
+      }
       $scope.myChart.setOption(
         ($scope.option = {
           tooltip: {
             formatter: function (info) {
-              let segmentValue = info.value;
-              let levelValues = info.name.split(' > ');
-              let basicTemplateArray = [`
-                <div class='display-flex'>
-                  <div class='margin-right-25'>
-                    <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
-                    <div>`];
-              levelValues.forEach(function (value, index) {
-                basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
-              });
-              basicTemplateArray.push(`</div></div>`);
-              basicTemplateArray.push(`
-                <div>
-                  <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
-                  <div class="font-size-25 font-bolder"> ${segmentValue}</div>
-                </div>
-              </div>`);
-              return basicTemplateArray.join('');
+              if ('Across Modules' === _config.moduleType) {
+                return _tooltipRenderer(info, levelLabels);
+              } else {
+                return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} ${info.value}`;
+              }
             },
+            position: 'inside',
             renderMode: 'html',
             backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
             borderColor: 'rgba(0, 0, 0, 1)',
@@ -340,7 +347,7 @@
       // Configure the chart
       $scope.option = {
         title: {
-          text: resourceName,
+          text: 'Single Module' === _config.moduleType ? '' : resourceName,
           left: 'center'
         },
         tooltip: {
@@ -434,30 +441,37 @@
         yAxis: [],
         data: []
       };
-      heatMapConfig.moduleName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
-      if ($scope.fields[_config.heatMap.xAxis.field.name] && (['picklist'].indexOf(_config.heatMap.xAxis.field.type) > -1)) {
-        ($scope.fields[_config.heatMap.xAxis.field.name].options).forEach(option => {
-          heatMapConfig.xAxis.push(option.itemValue);
-        });
-      } else if ($scope.fields[_config.heatMap.xAxis.field.name] && ('datetime' === _config.heatMap.xAxis.field.type)) {
-        _updateEpochToDate(rawData, heatMapConfig, 'xAxis');
-      }
-      if ($scope.fields[_config.heatMap.yAxis.field.name] && (['picklist'].indexOf(_config.heatMap.yAxis.field.type) > -1)) {
-        ($scope.fields[_config.heatMap.yAxis.field.name].options).forEach(option => {
-          heatMapConfig.yAxis.push(option.itemValue);
-        });
-      } else if ($scope.fields[_config.heatMap.yAxis.field.name] && ('datetime' === _config.heatMap.yAxis.field.type)) {
-        _updateEpochToDate(rawData, heatMapConfig, 'yAxis');
-      }
       let max = 0;
-      let formedData = rawData;
-      if ([_config.heatMap.xAxis.field.type, _config.heatMap.yAxis.field.type].indexOf('picklist') > -1) {
-        formedData = _constructHeatmapDatetimeData(rawData);
+      if ('Across Modules' === _config.moduleType) {
+        heatMapConfig.moduleName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
+        if ($scope.fields[_config.heatMap.xAxis.field.name] && (['picklist'].indexOf(_config.heatMap.xAxis.field.type) > -1)) {
+          ($scope.fields[_config.heatMap.xAxis.field.name].options).forEach(option => {
+            heatMapConfig.xAxis.push(option.itemValue);
+          });
+        } else if ($scope.fields[_config.heatMap.xAxis.field.name] && ('datetime' === _config.heatMap.xAxis.field.type)) {
+          _updateEpochToDate(rawData, heatMapConfig, 'xAxis');
+        }
+        if ($scope.fields[_config.heatMap.yAxis.field.name] && (['picklist'].indexOf(_config.heatMap.yAxis.field.type) > -1)) {
+          ($scope.fields[_config.heatMap.yAxis.field.name].options).forEach(option => {
+            heatMapConfig.yAxis.push(option.itemValue);
+          });
+        } else if ($scope.fields[_config.heatMap.yAxis.field.name] && ('datetime' === _config.heatMap.yAxis.field.type)) {
+          _updateEpochToDate(rawData, heatMapConfig, 'yAxis');
+        }
+        let formedData = rawData;
+        if ([_config.heatMap.xAxis.field.type, _config.heatMap.yAxis.field.type].indexOf('picklist') > -1) {
+          formedData = _constructHeatmapDatetimeData(rawData);
+        }
+        heatMapConfig.data = formedData.map(function(data) {
+          max = data['total'] > max ? data['total'] : max;
+          return [heatMapConfig.xAxis.indexOf(data[_config.heatMap.xAxis.field.name]), heatMapConfig.yAxis.indexOf(data[_config.heatMap.yAxis.field.name]), data['total'] || '-'];
+        });
+      } else {
+        heatMapConfig = rawData;
+        heatMapConfig.data.forEach(function(data) {
+          max = data[2] > max ? data[2] : max;
+        });
       }
-      heatMapConfig.data = formedData.map(function(data) {
-        max = data['total'] > max ? data['total'] : max;
-        return [heatMapConfig.xAxis.indexOf(data[_config.heatMap.xAxis.field.name]), heatMapConfig.yAxis.indexOf(data[_config.heatMap.yAxis.field.name]), data['total'] || '-'];
-      });
 
       $scope.option = {
         tooltip: {
