@@ -46,13 +46,13 @@
                 <div class="col-md-6 padding-right-0">
                     <div class="radio">
                         <label><input id="JsonField" name="JsonField" type="radio" data-ng-model="config.moduleType"
-                      data-ng-change="onChangeModuleType()" value="Single Module">&nbsp;&nbsp;Record Containing JSON Data</label>
+                      data-ng-change="onChangeModuleType()" data-ng-value="dataVisualization_VIZ_TYPES.SINGLE">&nbsp;&nbsp;Record Containing JSON Data</label>
                         <span data-uib-tooltip="It allows you to select a single JSON record within the module."
                     data-tooltip-append-to-body="true"><i class="icon icon-information font-Size-13"></i></span>
                     </div>
                     <div class="radio">
                         <label><input id="accrossModules" name="accrossModules" type="radio" data-ng-model="config.moduleType"
-                      data-ng-change="onChangeModuleType()" value="Across Modules">&nbsp;&nbsp;Get Live Data</label>
+                      data-ng-change="onChangeModuleType()" data-ng-value="dataVisualization_VIZ_TYPES.ACROSS">&nbsp;&nbsp;Get Live Data</label>
                         <span data-uib-tooltip="It allows you to select a module and fields, rendering real-time data." data-tooltip-append-to-body="true"><i
                       class="icon icon-information font-Size-13"></i></span>
                     </div>
@@ -79,7 +79,7 @@
         </div>
 
         <!-- To fetch from single JSON Record -->
-        <div data-ng-if="config.moduleType === 'Single Module'">
+        <div data-ng-if="config.moduleType === dataVisualization_VIZ_TYPES.SINGLE">
             <!-- Object/JSON Field -->
             <div class="form-group"
                 data-ng-class="{ 'has-error': editDataVisualizationForm.objectField.$invalid && editDataVisualizationForm.objectField.$touched }"
@@ -99,7 +99,7 @@
         </div>
 
         <!-- Live Data -->
-        <div data-ng-if="config.moduleType === 'Across Modules'">
+        <div data-ng-if="config.moduleType === dataVisualization_VIZ_TYPES.ACROSS">
             <!-- Config for Sunburst/Treemap -->
             <div data-ng-if="[dataVisualization_VIZ_MAP_TYPES.SUNBURST, dataVisualization_VIZ_MAP_TYPES.TREE_MAP].indexOf(config.vizType) > -1 && modules && config.resource">
                 <div data-ng-repeat="picklistField in config.sunTree.mappingLevel track by $index">

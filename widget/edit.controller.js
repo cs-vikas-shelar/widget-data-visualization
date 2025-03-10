@@ -8,14 +8,15 @@
     .module('cybersponse')
     .controller('editDataVisualization100Ctrl', editDataVisualization100Ctrl);
 
-  editDataVisualization100Ctrl.$inject = ['$scope', '$state', '$uibModalInstance', 'config', 'widgetUtilityService', '$timeout', 'appModulesService', 'Entity', 'dataVisualizationService', 'CommonUtils', 'dataVisualization_VIZ_MAP_TYPES', '_'];
+  editDataVisualization100Ctrl.$inject = ['$scope', '$state', '$uibModalInstance', 'config', 'widgetUtilityService', '$timeout', 'appModulesService', 'Entity', 'dataVisualizationService', 'CommonUtils', 'dataVisualization_VIZ_MAP_TYPES', '_', 'dataVisualization_VIZ_TYPES'];
 
-  function editDataVisualization100Ctrl($scope, $state, $uibModalInstance, config, widgetUtilityService, $timeout, appModulesService, Entity, dataVisualizationService, CommonUtils, dataVisualization_VIZ_MAP_TYPES, _) {
+  function editDataVisualization100Ctrl($scope, $state, $uibModalInstance, config, widgetUtilityService, $timeout, appModulesService, Entity, dataVisualizationService, CommonUtils, dataVisualization_VIZ_MAP_TYPES, _, dataVisualization_VIZ_TYPES) {
     $scope.cancel = cancel;
     $scope.save = save;
     $scope.config = config;
     $scope.page = $state.params.page;
     $scope.dataVisualization_VIZ_MAP_TYPES = dataVisualization_VIZ_MAP_TYPES;
+    $scope.dataVisualization_VIZ_TYPES = dataVisualization_VIZ_TYPES;
     $scope.loadAttributes = loadAttributes;
     $scope.onChangeModuleType = onChangeModuleType;
     $scope.dateRanges = [{
@@ -32,7 +33,7 @@
       title: 'Month Day',
       name: '%b %e'
     }];
-    $scope.config.moduleType = $scope.config.moduleType ? $scope.config.moduleType : 'Across Modules';
+    $scope.config.moduleType = $scope.config.moduleType ? $scope.config.moduleType : $scope.dataVisualization_VIZ_TYPES.ACROSS;
     const maxLevel = 3;
 
     function _handleTranslations() {

@@ -12,5 +12,9 @@
       'SUNBURST': 'sunburst',
       'TREE_MAP': 'treemap',
       'WORD_CLOUD': 'wordCloud'
+    })
+    .constant('dataVisualization_VIZ_TYPES', {
+      'ACROSS': 'Across Modules',
+      'SINGLE': 'Single Module'
     });
 })();
