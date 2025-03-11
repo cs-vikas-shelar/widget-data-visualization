@@ -85,25 +85,24 @@
                             alias: 'orderIndex',
                             field: config.sunTree.mappingLevel[0].name + '.orderIndex'
                         });
+                        queryObject.aggregates.push({
+                            operator: 'groupby',
+                            // alias: 'l' + index + 'Color',
+                            alias: config.sunTree.mappingLevel[0].name + 'Color',
+                            field: config.sunTree.mappingLevel[0].name + '.color'
+                        });
                     }
                     queryObject.aggregates.push({
                         operator: 'count',
                         field: '*',
                         alias: 'total'
                     });
-                    (config.sunTree.mappingLevel).forEach((level, index) => {
+                    (config.sunTree.mappingLevel).forEach((level) => {
                         queryObject.aggregates.push({
                             operator: 'groupby',
                             alias: level.name,
                             field: level.name + (['picklist'].indexOf(level.type) > -1 ? '.itemValue' : '.name')
                         });
-                        if (['picklist'].indexOf(config.sunTree.mappingLevel[0].type) > -1) {
-                            queryObject.aggregates.push({
-                                operator: 'groupby',
-                                alias: 'l' + index + 'Color',
-                                field: level.name + '.color'
-                            });
-                        }
                     });
                 }
                     break;

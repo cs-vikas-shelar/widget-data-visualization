@@ -111,17 +111,43 @@
       }
     };
 
+    function _hexToRGBA(hex, alpha) {
+      // Remove # if present
+      hex = hex.replace(/^#/, '');
+  
+      // Parse hex into RGB values
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+
+      if (alpha < 0) {
+        r = (1 + alpha) * r;
+        g = (1 + alpha) * g;
+        b = (1 + alpha) * b;
+      } else {
+        r = (1 - alpha) * r + alpha * 255;
+        g = (1 - alpha) * g + alpha * 255;
+        b = (1 - alpha) * b + alpha * 255;
+      }
+  
+      return `rgba(${r}, ${g}, ${b})`;
+    }
+
     function _createNestedObject(obj, record, keys) {
       let current = obj;
+      let alpha = 0;
       for (const key of keys) {
         if (!current[record[key]]) {
           current[record[key]] = {};
         }
         current[record[key]]['$count'] = current[record[key]]['$count'] ? current[record[key]]['$count'] + record.total : record.total;
         current = current[record[key]]; 
-        current['$itemStyle'] = {
-          color: record.l0Color
-        };
+        if (!CommonUtils.isUndefined(record[keys[0] + 'Color'])) {
+          current['$itemStyle'] = {
+            color: _hexToRGBA(record[keys[0] + 'Color'], alpha)
+          };
+          alpha += 0.2;
+        }
       }
       return obj;
     }
