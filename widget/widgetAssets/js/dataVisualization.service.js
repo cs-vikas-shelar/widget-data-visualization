@@ -87,7 +87,6 @@
                         });
                         queryObject.aggregates.push({
                             operator: 'groupby',
-                            // alias: 'l' + index + 'Color',
                             alias: config.sunTree.mappingLevel[0].name + 'Color',
                             field: config.sunTree.mappingLevel[0].name + '.color'
                         });
