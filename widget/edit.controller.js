@@ -47,7 +47,7 @@
             BTN_SAVE: widgetUtilityService.translate('dataVisualization.BTN_SAVE'),
             HEADER_EDIT_DATA_VISUALIZATION: widgetUtilityService.translate('dataVisualization.HEADER_EDIT_DATA_VISUALIZATION'),
             LABEL_DATA_SOURCE: widgetUtilityService.translate('dataVisualization.LABEL_DATA_SOURCE'),
-            LABEL_FILTER_CRITERIA: widgetUtilityService.translate('dataVisualization.LABEL_DATA_SOURCE'),
+            LABEL_FILTER_CRITERIA: widgetUtilityService.translate('dataVisualization.LABEL_FILTER_CRITERIA'),
             LABEL_LEVEL_COUNT: widgetUtilityService.translate('dataVisualization.LABEL_LEVEL_COUNT'),
             LABEL_RESOURCE: widgetUtilityService.translate('dataVisualization.LABEL_RESOURCE'),
             LABEL_SELECT_JSON_FIELD: widgetUtilityService.translate('dataVisualization.LABEL_SELECT_JSON_FIELD'),
