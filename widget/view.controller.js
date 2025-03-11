@@ -191,7 +191,7 @@
       basicTemplateArray.push(`</div></div>`);
       basicTemplateArray.push(`
         <div>
-          <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
+          <div class='font-size-10 font-italic padding-bottom-sm'>${widgetUtilityService.translate('dataVisualization.LABEL_TOTAL')}</div>
           <div class="font-size-25 font-bolder"> ${segmentValue}</div>
         </div>
       </div>`);
@@ -225,7 +225,6 @@
               return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} <span class="padding-left-md">${info.value}</span>`;
             }
           },
-          position: 'inside',
           renderMode: 'html',
           backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
           borderColor: 'rgba(0, 0, 0, 1)',
@@ -294,7 +293,6 @@
                 return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} <span class="padding-left-md">${info.value}</span>`;
               }
             },
-            position: 'inside',
             renderMode: 'html',
             backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
             borderColor: 'rgba(0, 0, 0, 1)',

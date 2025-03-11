@@ -43,6 +43,37 @@
         widgetUtilityService.checkTranslationMode(widgetNameVersion).then(function () {
           $scope.viewWidgetVars = {
             // Create your translating static string variables here
+            BTN_CLOSE: widgetUtilityService.translate('dataVisualization.BTN_CLOSE'),
+            BTN_SAVE: widgetUtilityService.translate('dataVisualization.BTN_SAVE'),
+            HEADER_EDIT_DATA_VISUALIZATION: widgetUtilityService.translate('dataVisualization.HEADER_EDIT_DATA_VISUALIZATION'),
+            LABEL_DATA_SOURCE: widgetUtilityService.translate('dataVisualization.LABEL_DATA_SOURCE'),
+            LABEL_FILTER_CRITERIA: widgetUtilityService.translate('dataVisualization.LABEL_DATA_SOURCE'),
+            LABEL_LEVEL_COUNT: widgetUtilityService.translate('dataVisualization.LABEL_LEVEL_COUNT'),
+            LABEL_RESOURCE: widgetUtilityService.translate('dataVisualization.LABEL_RESOURCE'),
+            LABEL_SELECT_JSON_FIELD: widgetUtilityService.translate('dataVisualization.LABEL_SELECT_JSON_FIELD'),
+            LABEL_TITLE: widgetUtilityService.translate('dataVisualization.LABEL_TITLE'),
+            LABEL_VIZ_TYPE: widgetUtilityService.translate('dataVisualization.LABEL_VIZ_TYPE'),
+            LABEL_WORD_SOURCE: widgetUtilityService.translate('dataVisualization.LABEL_WORD_SOURCE'),
+            LABEL_X_AXIS: widgetUtilityService.translate('dataVisualization.LABEL_X_AXIS'),
+            LABEL_X_AXIS_DATE_FORMAT: widgetUtilityService.translate('dataVisualization.LABEL_X_AXIS_DATE_FORMAT'),
+            LABEL_X_AXIS_DATE_RANGE: widgetUtilityService.translate('dataVisualization.LABEL_X_AXIS_DATE_RANGE'),
+            LABEL_Y_AXIS: widgetUtilityService.translate('dataVisualization.LABEL_Y_AXIS'),
+            LABEL_Y_AXIS_DATE_FORMAT: widgetUtilityService.translate('dataVisualization.LABEL_Y_AXIS_DATE_FORMAT'),
+            LABEL_Y_AXIS_DATE_RANGE: widgetUtilityService.translate('dataVisualization.LABEL_Y_AXIS_DATE_RANGE'),
+            OPT_SELECT_AN_OPTION: widgetUtilityService.translate('dataVisualization.OPT_SELECT_AN_OPTION'),
+            RADIO_OPT_LIVE_DATA: widgetUtilityService.translate('dataVisualization.RADIO_OPT_LIVE_DATA'),
+            RADIO_OPT_STATIC_DATA: widgetUtilityService.translate('dataVisualization.RADIO_OPT_STATIC_DATA'),
+            TOOLTIP_DATA_SOURCE: widgetUtilityService.translate('dataVisualization.TOOLTIP_DATA_SOURCE'),
+            TOOLTIP_LEVEL_COUNT: widgetUtilityService.translate('dataVisualization.TOOLTIP_LEVEL_COUNT'),
+            TOOLTIP_LIVE_DATA: widgetUtilityService.translate('dataVisualization.TOOLTIP_LIVE_DATA'),
+            TOOLTIP_RESOURCE: widgetUtilityService.translate('dataVisualization.TOOLTIP_RESOURCE'),
+            TOOLTIP_SELECT_JSON_FIELD: widgetUtilityService.translate('dataVisualization.TOOLTIP_SELECT_JSON_FIELD'),
+            TOOLTIP_STATIC_DATA: widgetUtilityService.translate('dataVisualization.TOOLTIP_STATIC_DATA'),
+            TOOLTIP_WORD_SOURCE: widgetUtilityService.translate('dataVisualization.TOOLTIP_WORD_SOURCE'),
+            TOOLTIP_X_AXIS: widgetUtilityService.translate('dataVisualization.TOOLTIP_X_AXIS'),
+            TOOLTIP_Y_AXIS: widgetUtilityService.translate('dataVisualization.TOOLTIP_Y_AXIS'),
+            TOOLTIP_X_Y_AXIS_DATE_FORMAT: widgetUtilityService.translate('dataVisualization.TOOLTIP_X_Y_AXIS_DATE_FORMAT'),
+            TOOLTIP_X_Y_AXIS_DATE_RANGE: widgetUtilityService.translate('dataVisualization.TOOLTIP_X_Y_AXIS_DATE_RANGE'),
           };
         });
       } else {

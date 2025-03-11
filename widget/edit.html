@@ -5,7 +5,7 @@
 <form data-ng-submit="save()" class="noMargin" name="editDataVisualizationForm"
     data-ng-class="{'state-wait': processing }" novalidate>
     <div class="modal-header">
-        <h3 class="modal-title col-md-9">Edit Data Visualization</h3>
+        <h3 class="modal-title col-md-9">{{ viewWidgetVars.HEADER_EDIT_DATA_VISUALIZATION }}</h3>
         <button type="button" class="close" data-ng-click="cancel()" data-dismiss="modal" aria-label="Close"
             id="close-edit-widget-form-btn">
             <div aria-hidden="true" class="version-button">+</div>
@@ -15,7 +15,7 @@
         <!-- Visualization Title -->
         <div class="form-group"
             data-ng-class="{ 'has-error':  editDataVisualizationForm.title.$invalid && editDataVisualizationForm.title.$touched }">
-            <label for="title" class="control-label">Title<span class="text-danger">*</span></label>
+            <label for="title" class="control-label">{{ viewWidgetVars.LABEL_TITLE }}<span class="text-danger">*</span></label>
             <input id="title" name="title" type="text" class="form-control" data-ng-model="config.title" required>
             <div data-cs-messages="editDataVisualizationForm.title">
             </div>
@@ -24,20 +24,20 @@
         <!-- Visualization Type-->
         <div class="form-group"
             data-ng-class="{ 'has-error':  editDataVisualizationForm.vizType.$invalid && editDataVisualizationForm.vizType.$touched }">
-            <label for="vizType" class="control-label">Visualization Type<span class="text-danger">*</span></label>
+            <label for="vizType" class="control-label">{{ viewWidgetVars.LABEL_VIZ_TYPE }}<span class="text-danger">*</span></label>
             <select name="vizType" id="vizType" class="form-control" required data-ng-model="config.vizType"
                 data-ng-options="viz.type as viz.title for viz in vizList | orderBy: 'title'">
-                <option value="">Select an option</option>
+                <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
             </select>
             <div data-cs-messages="editDataVisualizationForm.vizType"></div>
         </div>
 
         <!-- Data Source -->
         <div>
-            <label for="editDataVisualizationForm" class="control-label">Data Source</label>
+            <label for="editDataVisualizationForm" class="control-label">{{ viewWidgetVars.LABEL_DATA_SOURCE }}</label>
             <span class="text-danger">*
               <span
-                data-uib-tooltip="Select 'Record Containing JSON Data' to render data from a single JSON record within the module. Select 'Get Live Data' to enable selection of module and fields, rendering real-time data based on specified filters"
+                data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_DATA_SOURCE }}"
                 data-tooltip-append-to-body="true"><i class="icon icon-information font-Size-13"></i></span>
             </span>
 
@@ -46,14 +46,14 @@
                 <div class="col-md-6 padding-right-0">
                     <div class="radio">
                         <label><input id="JsonField" name="JsonField" type="radio" data-ng-model="config.moduleType"
-                      data-ng-change="onChangeModuleType()" data-ng-value="dataVisualization_VIZ_TYPES.SINGLE">&nbsp;&nbsp;Record Containing JSON Data</label>
-                        <span data-uib-tooltip="It allows you to select a single JSON record within the module."
+                      data-ng-change="onChangeModuleType()" data-ng-value="dataVisualization_VIZ_TYPES.SINGLE">&nbsp;&nbsp;{{ viewWidgetVars.RADIO_OPT_STATIC_DATA }}</label>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_STATIC_DATA }}"
                     data-tooltip-append-to-body="true"><i class="icon icon-information font-Size-13"></i></span>
                     </div>
                     <div class="radio">
                         <label><input id="accrossModules" name="accrossModules" type="radio" data-ng-model="config.moduleType"
-                      data-ng-change="onChangeModuleType()" data-ng-value="dataVisualization_VIZ_TYPES.ACROSS">&nbsp;&nbsp;Get Live Data</label>
-                        <span data-uib-tooltip="It allows you to select a module and fields, rendering real-time data." data-tooltip-append-to-body="true"><i
+                      data-ng-change="onChangeModuleType()" data-ng-value="dataVisualization_VIZ_TYPES.ACROSS">&nbsp;&nbsp;{{ viewWidgetVars.RADIO_OPT_LIVE_DATA }}</label>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_LIVE_DATA }}" data-tooltip-append-to-body="true"><i
                       class="icon icon-information font-Size-13"></i></span>
                     </div>
                 </div>
@@ -65,15 +65,15 @@
         <div class="form-group"
             data-ng-class="{ 'has-error': editDataVisualizationForm.resource.$invalid && editDataVisualizationForm.resource.$touched }"
             data-ng-if="modules">
-            <label for="resource" class="control-label">Source<span class="text-danger">*</span>
-                        <span data-uib-tooltip="Select the module whose records are to be visualize." data-tooltip-append-to-body="true">
+            <label for="resource" class="control-label">{{ viewWidgetVars.LABEL_RESOURCE }}<span class="text-danger">*</span>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_RESOURCE }}" data-tooltip-append-to-body="true">
                           <i class="margin-left-sm icon icon-information font-Size-13"></i>
                         </span>
                       </label>
             <select name="resource" id="resource" class="form-control"
                         data-ng-options="module.type as module.name for module in modules" data-ng-model="config.resource"
                         data-ng-change="loadAttributes()" required>
-                        <option value="">Select an Option</option>
+                        <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                       </select>
             <div data-cs-messages="editDataVisualizationForm.resource"></div>
         </div>
@@ -84,15 +84,15 @@
             <div class="form-group"
                 data-ng-class="{ 'has-error': editDataVisualizationForm.objectField.$invalid && editDataVisualizationForm.objectField.$touched }"
                 data-ng-if="modules && config.resource">
-                <label for="objectField" class="control-label">Select JSON Field<span class="text-danger">*</span>
-                    <span data-uib-tooltip="Select the Field which has the data, only json type fields will be available in the dropdown." data-tooltip-append-to-body="true">
+                <label for="objectField" class="control-label">{{ viewWidgetVars.LABEL_SELECT_JSON_FIELD }}<span class="text-danger">*</span>
+                    <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_SELECT_JSON_FIELD}}" data-tooltip-append-to-body="true">
                       <i class="margin-left-sm icon icon-information font-Size-13"></i>
                     </span>
                 </label>
                 <select name="objectField" id="objectField" class="form-control"
                     data-ng-options="field.name as field.title for field in fieldsArray | filter: filterByFieldType(['object']) | orderBy: 'title'"
                     data-ng-model="config.objectField" required>
-                    <option value="">Select an Option</option>
+                    <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                 </select>
                 <div data-cs-messages="editDataVisualizationForm.objectField"></div>
             </div>
@@ -105,15 +105,15 @@
                 <div data-ng-repeat="picklistField in config.sunTree.mappingLevel track by $index">
                     <div class="form-group"
                         data-ng-class="{ 'has-error': editDataVisualizationForm['picklistField-' + $index].$invalid && editDataVisualizationForm['picklistField-' + $index].$touched }">
-                        <label for="picklistField-{{ $index }}" class="control-label">Level {{ $index + 1 }}<span class="text-danger">*</span>
-                            <span data-uib-tooltip="Select the picklist to group the records in the selected module." data-tooltip-append-to-body="true">
+                        <label for="picklistField-{{ $index }}" class="control-label">{{ viewWidgetVars.LABEL_LEVEL_COUNT }} {{ $index + 1 }}<span class="text-danger">*</span>
+                            <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_LEVEL_COUNT }}" data-tooltip-append-to-body="true">
                             <i class="margin-left-sm icon icon-information font-Size-13"></i>
                             </span>
                         </label>
                         <select name="picklistField-{{ $index }}" id="picklistField-{{ $index }}" class="form-control"
                             data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'lookup']) | orderBy: 'title' track by field.name"
                             data-ng-model="config.sunTree.mappingLevel[$index]" required>
-                            <option value="">Select an Option</option>
+                            <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm['picklistField-' + $index]"></div>
                     </div>
@@ -124,15 +124,15 @@
                 <div class="form-group"
                     data-ng-class="{ 'has-error': editDataVisualizationForm.wordSource.$invalid && editDataVisualizationForm.wordSource.$touched }"
                     data-ng-if="modules && config.resource">
-                    <label for="wordSource" class="control-label">Word Source<span class="text-danger">*</span>
-                        <span data-uib-tooltip="Select the picklist to group the records in the selected module." data-tooltip-append-to-body="true">
-                        <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                    <label for="wordSource" class="control-label">{{ viewWidgetVars.LABEL_WORD_SOURCE }}<span class="text-danger">*</span>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_WORD_SOURCE }}" data-tooltip-append-to-body="true">
+                            <i class="margin-left-sm icon icon-information font-Size-13"></i>
                         </span>
                     </label>
                     <select name="wordSource" id="wordSource" class="form-control"
                         data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'text']) | orderBy: 'title' track by field.name"
                         data-ng-model="config.wordCloud.wordSource" required>
-                        <option value="">Select an Option</option>
+                        <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                     </select>
                     <div data-cs-messages="editDataVisualizationForm.wordSource"></div>
                 </div>
@@ -142,11 +142,14 @@
                 <div class="form-group"
                     data-ng-class="{ 'has-error': editDataVisualizationForm.xAxis.$invalid && editDataVisualizationForm.xAxis.$touched }"
                     data-ng-if="modules && config.resource">
-                    <label for="xAxis" class="control-label">X-axis<span class="text-danger">*</span></label>
+                    <label for="xAxis" class="control-label">{{ viewWidgetVars.LABEL_X_AXIS }}<span class="text-danger">*</span></label>
+                    <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_X_AXIS }}" data-tooltip-append-to-body="true">
+                        <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                    </span>
                     <select name="xAxis" id="xAxis" class="form-control"
                         data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title' track by field.name"
                         data-ng-model="config.heatMap.xAxis.field" required>
-                        <option value="">Select an Option</option>
+                        <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                     </select>
                     <div data-cs-messages="editDataVisualizationForm.xAxis"></div>
                 </div>
@@ -154,21 +157,27 @@
                     <div class="form-group"
                         data-ng-class="{ 'has-error': editDataVisualizationForm.xAxisTimeScope.$invalid && editDataVisualizationForm.xAxisTimeScope.$touched }"
                         data-ng-if="modules && config.resource">
-                        <label for="xAxisTimeScope" class="control-label">X-axis Date Range<span class="text-danger">*</span></label>
+                        <label for="xAxisTimeScope" class="control-label">{{ viewWidgetVars.LABEL_X_AXIS_DATE_RANGE }}<span class="text-danger">*</span></label>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_X_Y_AXIS_DATE_RANGE }}" data-tooltip-append-to-body="true">
+                            <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                        </span>
                         <select name="xAxisTimeScope" id="xAxisTimeScope" class="form-control"
                             data-ng-options="dateRange.name as dateRange.title for dateRange in dateRanges"
                             data-ng-model="config.heatMap.xAxis.timeScope" data-ng-required="'datetime' === config.heatMap.xAxis.field.type">
-                            <option value="">Select an Option</option>
+                            <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.xAxisTimeScope"></div>
                     </div>
                     <div class="form-group" data-ng-class="{ 'has-error': editDataVisualizationForm.xAxisDateFormat.$invalid && editDataVisualizationForm.xAxisDateFormat.$touched }">
-                        <label for="xAxisDateFormat" class="control-label">X-axis Date Format<span class="text-danger">*</span></label>
+                        <label for="xAxisDateFormat" class="control-label">{{ viewWidgetVars.LABEL_X_AXIS_DATE_FORMAT }}<span class="text-danger">*</span></label>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_X_Y_AXIS_DATE_FORMAT }}" data-tooltip-append-to-body="true">
+                            <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                        </span>
                         <select name="xAxisDateFormat" id="xAxisDateFormat" class="form-control"
                             data-ng-required="'datetime' === config.heatMap.xAxis.field.type"
                             data-ng-model="config.heatMap.xAxis.dateFormat"
                             data-ng-options="dateFormat.name as dateFormat.title for dateFormat in dateFormatsC3">
-                            <option value="">Select an Option</option>
+                            <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.xAxisDateFormat"></div>
                     </div>
@@ -176,11 +185,14 @@
                 <div class="form-group"
                     data-ng-class="{ 'has-error': editDataVisualizationForm.yAxis.$invalid && editDataVisualizationForm.yAxis.$touched }"
                     data-ng-if="modules && config.resource">
-                    <label for="yAxis" class="control-label">Y-axis<span class="text-danger">*</span></label>
+                    <label for="yAxis" class="control-label">{{ viewWidgetVars.LABEL_Y_AXIS }}<span class="text-danger">*</span></label>
+                    <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_Y_AXIS }}" data-tooltip-append-to-body="true">
+                        <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                    </span>
                     <select name="yAxis" id="yAxis" class="form-control"
                         data-ng-options="{ name: field.name, type: field.type } as field.title for field in fieldsArray | filter: filterByFieldType(['picklist', 'datetime']) | orderBy: 'title' track by field.name"
                         data-ng-model="config.heatMap.yAxis.field" required>
-                        <option value="">Select an Option</option>
+                        <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                     </select>
                     <div data-cs-messages="editDataVisualizationForm.yAxis"></div>
                 </div>
@@ -188,21 +200,27 @@
                     <div class="form-group"
                         data-ng-class="{ 'has-error': editDataVisualizationForm.yAxisTimeScope.$invalid && editDataVisualizationForm.yAxisTimeScope.$touched }"
                         data-ng-if="modules && config.resource">
-                        <label for="yAxisTimeScope" class="control-label">Y-axis Date Range<span class="text-danger">*</span></label>
+                        <label for="yAxisTimeScope" class="control-label">{{ viewWidgetVars.LABEL_Y_AXIS_DATE_RANGE }}<span class="text-danger">*</span></label>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_X_Y_AXIS_DATE_RANGE }}" data-tooltip-append-to-body="true">
+                            <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                        </span>
                         <select name="yAxisTimeScope" id="yAxisTimeScope" class="form-control"
                             data-ng-options="dateRange.name as dateRange.title for dateRange in dateRanges"
                             data-ng-model="config.heatMap.yAxis.timeScope" data-ng-required="'datetime' === config.heatMap.yAxis.field.type">
-                            <option value="">Select an Option</option>
+                            <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.yAxisTimeScope"></div>
                     </div>
                     <div class="form-group" data-ng-class="{ 'has-error': editDataVisualizationForm.yAxisDateFormat.$invalid && editDataVisualizationForm.yAxisDateFormat.$touched }">
-                        <label for="yAxisDateFormat" class="control-label">Y-axis Date Format<span class="text-danger">*</span></label>
+                        <label for="yAxisDateFormat" class="control-label">{{ viewWidgetVars.LABEL_Y_AXIS_DATE_FORMAT }}<span class="text-danger">*</span></label>
+                        <span data-uib-tooltip="{{ viewWidgetVars.TOOLTIP_X_Y_AXIS_DATE_FORMAT }}" data-tooltip-append-to-body="true">
+                            <i class="margin-left-sm icon icon-information font-Size-13"></i>
+                        </span>
                         <select name="yAxisDateFormat" id="yAxisDateFormat" class="form-control"
                             data-ng-required="'datetime' === config.heatMap.yAxis.field.type"
                             data-ng-model="config.heatMap.yAxis.dateFormat"
                             data-ng-options="dateFormat.name as dateFormat.title for dateFormat in dateFormatsC3">
-                            <option value="">Select an Option</option>
+                            <option value="">{{ viewWidgetVars.OPT_SELECT_AN_OPTION }}</option>
                         </select>
                         <div data-cs-messages="editDataVisualizationForm.yAxisDateFormat"></div>
                     </div>
@@ -217,7 +235,7 @@
         <div data-ng-hide="!config.resource || !fieldsArray || fieldsArray.length === 0">
             <div class="form-group"
                 data-ng-class="{ 'has-error': editDataVisualizationForm.filters.$invalid && editDataVisualizationForm.filters.$touched }">
-                <label for="filters" class="control-label">Filter Criteria</label>
+                <label for="filters" class="control-label">{{ viewWidgetVars.LABEL_FILTER_CRITERIA }}</label>
                 <div data-cs-conditional data-ng-if="fieldsArray.length > 0" data-fields="$parent.fields"
                     data-mode="'queryFilters'" data-ng-model="$parent.config.query"
                     data-parent-form="editDataVisualizationForm"
@@ -230,8 +248,8 @@
     </div>
     <div class="modal-footer">
         <button id="edit-widget-save" type="submit" class="btn btn-sm btn-primary"><i
-                class="icon icon-check margin-right-sm"></i>Save</button>
+                class="icon icon-check margin-right-sm"></i>{{ viewWidgetVars.BTN_SAVE }}</button>
         <button id="edit-widget-cancel" type="button" class="btn btn-sm btn-default" data-ng-click="cancel()"><i
-                class="icon icon-close margin-right-sm"></i>Close</button>
+                class="icon icon-close margin-right-sm"></i>{{ viewWidgetVars.BTN_CLOSE }}</button>
     </div>
 </form>

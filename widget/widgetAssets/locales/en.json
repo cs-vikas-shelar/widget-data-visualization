@@ -1,5 +1,36 @@
 {
-    "dataVisualization": {
-        "KEY_NAME": ""
-    }
+  "dataVisualization": {
+    "BTN_CLOSE": "Close",
+    "BTN_SAVE": "Save",
+    "HEADER_EDIT_DATA_VISUALIZATION": "Edit Data Visualization",
+    "LABEL_DATA_SOURCE": "Data Source",
+    "LABEL_FILTER_CRITERIA": "Filter Criteria",
+    "LABEL_LEVEL_COUNT": "Level",
+    "LABEL_RESOURCE": "Source",
+    "LABEL_SELECT_JSON_FIELD": "Select JSON Field",
+    "LABEL_TITLE": "Title",
+    "LABEL_TOTAL": "Total",
+    "LABEL_VIZ_TYPE": "Visualization Type",
+    "LABEL_WORD_SOURCE": "Word Source",
+    "LABEL_X_AXIS": "X-Axis",
+    "LABEL_X_AXIS_DATE_FORMAT": "X-Axis Date Format",
+    "LABEL_X_AXIS_DATE_RANGE": "X-Axis Date Range",
+    "LABEL_Y_AXIS": "Y-Axis",
+    "LABEL_Y_AXIS_DATE_FORMAT": "Y-Axis Date Format",
+    "LABEL_Y_AXIS_DATE_RANGE": "Y-Axis Date Range",
+    "OPT_SELECT_AN_OPTION": "Select an option",
+    "RADIO_OPT_LIVE_DATA": "Get Live Data",
+    "RADIO_OPT_STATIC_DATA": "Record Containing JSON Data",
+    "TOOLTIP_DATA_SOURCE": "Select 'Record Containing JSON Data' to render data from a single JSON record within the module. Select 'Get Live Data' to enable selection of module and fields, rendering real-time data based on specified filters",
+    "TOOLTIP_LEVEL_COUNT": "Select the picklist to group the records in the selected module.",
+    "TOOLTIP_LIVE_DATA": "It allows you to select a module and fields, rendering real-time data.",
+    "TOOLTIP_RESOURCE": "Select the module whose records are to be visualize.",
+    "TOOLTIP_SELECT_JSON_FIELD": "Select the Field which has the data, only json type fields will be available in the dropdown.",
+    "TOOLTIP_STATIC_DATA": "It allows you to select a single JSON record within the module.",
+    "TOOLTIP_WORD_SOURCE": "Select a picklist or text field as the source for generating the word cloud. The chosen field's data will determine the word frequency and size.",
+    "TOOLTIP_X_AXIS": "Choose a picklist or datetime field to represent the X-Axis values in the Heatmap visualization.",
+    "TOOLTIP_Y_AXIS": "Choose a picklist or datetime field to represent the Y-Axis values in the Heatmap visualization.",
+    "TOOLTIP_X_Y_AXIS_DATE_FORMAT": "Select the format for displaying dates. Choose 'Month Year' (e.g., Jan 2025) or 'Month Day' (e.g., Jan 15).",
+    "TOOLTIP_X_Y_AXIS_DATE_RANGE": "Choose 'Monthly' to group data by month or 'Daily' for a day-wise breakdown."
+  }
 }
