@@ -8,9 +8,9 @@
     .module('cybersponse')
     .controller('dataVisualization100Ctrl', dataVisualization100Ctrl);
 
-  dataVisualization100Ctrl.$inject = ['$scope', 'widgetUtilityService', 'config', '$timeout', 'dataVisualizationService', 'Entity', 'dataVisualization_VIZ_MAP_TYPES', '$rootScope', '_'];
+  dataVisualization100Ctrl.$inject = ['$scope', 'widgetUtilityService', 'config', '$timeout', 'dataVisualizationService', 'Entity', 'dataVisualization_VIZ_MAP_TYPES', '$rootScope', '_', 'dataVisualization_VIZ_TYPES', 'CommonUtils'];
 
-  function dataVisualization100Ctrl($scope, widgetUtilityService, config, $timeout, dataVisualizationService, Entity, dataVisualization_VIZ_MAP_TYPES, $rootScope, _) {
+  function dataVisualization100Ctrl($scope, widgetUtilityService, config, $timeout, dataVisualizationService, Entity, dataVisualization_VIZ_MAP_TYPES, $rootScope, _, dataVisualization_VIZ_TYPES, CommonUtils) {
 
     $scope.config = config;
     var _config = angular.copy(config);
@@ -38,7 +38,7 @@
       });
       $scope.option = undefined;
       setFilter();
-      if ($scope.config.moduleType === 'Single Module') {
+      if ($scope.config.moduleType === dataVisualization_VIZ_TYPES.SINGLE) {
         processStaticChartData();
       } else {
         processLiveChartData();
@@ -132,7 +132,7 @@
       }
 
       let formedData;
-      if (([dataVisualization_VIZ_MAP_TYPES.WORD_CLOUD, dataVisualization_VIZ_MAP_TYPES.HEAT_MAP].indexOf(config.vizType) > -1) || ('Single Module' === _config.moduleType)) {
+      if (([dataVisualization_VIZ_MAP_TYPES.WORD_CLOUD, dataVisualization_VIZ_MAP_TYPES.HEAT_MAP].indexOf(config.vizType) > -1) || (dataVisualization_VIZ_TYPES.SINGLE === _config.moduleType)) {
          formedData = data;
       } else {
         // Form Data for Map Rendering
@@ -177,19 +177,21 @@
 
     function _tooltipRenderer(info, levelLabels) {
       let segmentValue = info.value;
-      let levelValues = info.name.split(' > ');
+      let levelValues = (!CommonUtils.isUndefined(info.name) && info.name.length !== 0) ? info.name.split(' > ') : [];
       let basicTemplateArray = [`
         <div class='display-flex'>
           <div class='margin-right-25'>
             <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
             <div>`];
-      levelValues.forEach(function (value, index) {
-        basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
-      });
+      if (levelValues.length > 0) {
+        levelValues.forEach(function (value, index) {
+          basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+        });
+      }
       basicTemplateArray.push(`</div></div>`);
       basicTemplateArray.push(`
         <div>
-          <div class='font-size-10 font-italic padding-bottom-sm'>Total</div>
+          <div class='font-size-10 font-italic padding-bottom-sm'>${widgetUtilityService.translate('dataVisualization.LABEL_TOTAL')}</div>
           <div class="font-size-25 font-bolder"> ${segmentValue}</div>
         </div>
       </div>`);
@@ -201,7 +203,7 @@
         children: []
       };
       let levelLabels;
-      if ('Across Modules' === _config.moduleType) {
+      if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
         convert(rawData, data, '');
         data.children = data.children.filter(children => children.name !== '');
         let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
@@ -217,13 +219,12 @@
         },
         tooltip: {
           formatter: function (info) {
-            if ('Across Modules' === _config.moduleType) {
+            if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
               return _tooltipRenderer(info, levelLabels);
             } else {
-              return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} ${info.value}`;
+              return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} <span class="padding-left-md">${info.value}</span>`;
             }
           },
-          position: 'inside',
           renderMode: 'html',
           backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
           borderColor: 'rgba(0, 0, 0, 1)',
@@ -272,7 +273,7 @@
         children: []
       };
       let levelLabels;
-      if ('Across Modules' === _config.moduleType) {
+      if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
         convert(rawData, data, '');
         data.children = data.children.filter(children => children.name !== '');
         let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
@@ -286,13 +287,12 @@
         ($scope.option = {
           tooltip: {
             formatter: function (info) {
-              if ('Across Modules' === _config.moduleType) {
+              if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
                 return _tooltipRenderer(info, levelLabels);
               } else {
-                return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} ${info.value}`;
+                return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} <span class="padding-left-md">${info.value}</span>`;
               }
             },
-            position: 'inside',
             renderMode: 'html',
             backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
             borderColor: 'rgba(0, 0, 0, 1)',
@@ -347,7 +347,7 @@
       // Configure the chart
       $scope.option = {
         title: {
-          text: 'Single Module' === _config.moduleType ? '' : resourceName,
+          text: dataVisualization_VIZ_TYPES.SINGLE === _config.moduleType ? '' : resourceName,
           left: 'center'
         },
         tooltip: {
@@ -442,7 +442,7 @@
         data: []
       };
       let max = 0;
-      if ('Across Modules' === _config.moduleType) {
+      if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
         heatMapConfig.moduleName = entity.descriptions.plural ? entity.descriptions.plural : entity.descriptions.singular;
         if ($scope.fields[_config.heatMap.xAxis.field.name] && (['picklist'].indexOf(_config.heatMap.xAxis.field.type) > -1)) {
           ($scope.fields[_config.heatMap.xAxis.field.name].options).forEach(option => {

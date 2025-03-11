@@ -1,5 +1,36 @@
 {
-    "dataVisualization": {
-        "KEY_NAME": ""
-    }
+  "dataVisualization": {
+    "BTN_CLOSE": "关闭",
+    "BTN_SAVE": "保存",
+    "HEADER_EDIT_DATA_VISUALIZATION": "编辑数据可视化",
+    "LABEL_DATA_SOURCE": "数据源",
+    "LABEL_FILTER_CRITERIA": "筛选条件",
+    "LABEL_LEVEL_COUNT": "层级",
+    "LABEL_RESOURCE": "来源",
+    "LABEL_SELECT_JSON_FIELD": "选择 JSON 字段",
+    "LABEL_TITLE": "标题",
+    "LABEL_TOTAL": "总计",
+    "LABEL_VIZ_TYPE": "可视化类型",
+    "LABEL_WORD_SOURCE": "单词来源",
+    "LABEL_X_AXIS": "X 轴",
+    "LABEL_X_AXIS_DATE_FORMAT": "X 轴日期格式",
+    "LABEL_X_AXIS_DATE_RANGE": "X 轴日期范围",
+    "LABEL_Y_AXIS": "Y 轴",
+    "LABEL_Y_AXIS_DATE_FORMAT": "Y 轴日期格式",
+    "LABEL_Y_AXIS_DATE_RANGE": "Y 轴日期范围",
+    "OPT_SELECT_AN_OPTION": "选择一个选项",
+    "RADIO_OPT_LIVE_DATA": "获取实时数据",
+    "RADIO_OPT_STATIC_DATA": "包含 JSON 数据的记录",
+    "TOOLTIP_DATA_SOURCE": "选择“包含 JSON 数据的记录”以从模块中的单个 JSON 记录渲染数据。选择“获取实时数据”以启用模块和字段选择，并根据指定的筛选条件渲染实时数据。",
+    "TOOLTIP_LEVEL_COUNT": "请选择用于在所选模块中对记录进行分组的选项列表。",
+    "TOOLTIP_LIVE_DATA": "允许您选择模块和字段，以渲染实时数据。",
+    "TOOLTIP_RESOURCE": "选择包含要可视化记录的模块。",
+    "TOOLTIP_SELECT_JSON_FIELD": "选择包含数据的字段，只有 JSON 类型的字段会显示在下拉菜单中。",
+    "TOOLTIP_STATIC_DATA": "允许您选择模块内的单个 JSON 记录。",
+    "TOOLTIP_WORD_SOURCE": "选择一个选择列表或文本字段作为生成词云的来源。所选字段的数据将决定单词的频率和大小。",
+    "TOOLTIP_X_AXIS": "选择用于表示热图可视化 X 轴值的选择列表或日期时间字段。",
+    "TOOLTIP_Y_AXIS": "选择用于表示热图可视化 Y 轴值的选择列表或日期时间字段。",
+    "TOOLTIP_X_Y_AXIS_DATE_FORMAT": "选择日期显示格式。可选“月份 年份”（如：2025年1月）或“月份 日期”（如：1月15日）。",
+    "TOOLTIP_X_Y_AXIS_DATE_RANGE": "选择“按月”以按月份分组数据，或“按日”以按天拆分数据。"
+  }
 }
