@@ -177,13 +177,13 @@
 
     function _tooltipRenderer(info, levelLabels) {
       let segmentValue = info.value;
-      let levelValues = info.name.split(' > ');
+      let levelValues = (!CommonUtils.isUndefined(info.name) && info.name.length !== 0) ? info.name.split(' > ') : [];
       let basicTemplateArray = [`
         <div class='display-flex'>
           <div class='margin-right-25'>
             <div class='tooltip-title font-size-16 font-bolder padding-bottom-sm'>${resourceName}</div>
             <div>`];
-      if (!CommonUtils.isUndefined(info.name) && info.name.length !== 0) {
+      if (levelValues.length > 0) {
         levelValues.forEach(function (value, index) {
           basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
         });
