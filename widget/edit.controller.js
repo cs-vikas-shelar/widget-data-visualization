@@ -98,6 +98,9 @@
 
     $scope.filterByFieldType = function(fieldTypes) {
       return function(field) {
+        if ('lookup' === field.type) {
+          return 'tenants' === field.module;
+        }
         return fieldTypes.indexOf(field.type) > -1;
       }
     }
