@@ -200,16 +200,11 @@
         target.itemStyle = source.$itemStyle;
       }
       else if ($scope.config.vizType === dataVisualization_VIZ_MAP_TYPES.TREE_MAP) {
-        let treeMapChild = {
-          name: basePath,
-          value: source.$count,
-          itemStyle: source.$itemStyle
-        };
-        if (source.$nodeClick) {
-          treeMapChild.nodeClick = source.$nodeClick;
-          treeMapChild.link = source.$link;
-        }
-       target.children.push(treeMapChild);
+       target.children.push({
+        name: basePath,
+        value: source.$count,
+        itemStyle: source.$itemStyle
+      });
       }
     }
 

@@ -22,7 +22,6 @@
             loadVisualizationType: loadVisualizationType,
             fetchLiveData: fetchLiveData,
             fetchStaticData: fetchStaticData,
-            getDateFormat: getDateFormat,
             redirectToModuleListing: redirectToModuleListing,
         };
 
@@ -238,22 +237,6 @@
 
         function loadVisualizationType() {
             return $http.get(`${WIDGET_BASE_PATH.INSTALLED}dataVisualization-1.0.0/widgetAssets/json/vizTypes.json`);
-        }
-
-        function getDateFormat(timeScope) {
-            var format;
-            switch (timeScope) {
-                case 'day':
-                format = 'yyyy-MM-dd';
-                break;
-
-                default:
-                case 'month':
-                format = 'yyyy-MM-01';
-                break;
-            }
-
-            return format;
         }
 
         return service;
