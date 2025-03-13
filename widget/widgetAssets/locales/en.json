@@ -27,7 +27,7 @@
     "TOOLTIP_RESOURCE": "Select the module whose records are to be visualize.",
     "TOOLTIP_SELECT_JSON_FIELD": "Select the Field which has the data, only json type fields will be available in the dropdown.",
     "TOOLTIP_STATIC_DATA": "It allows you to select a single JSON record within the module.",
-    "TOOLTIP_WORD_SOURCE": "Select a picklist or text field as the source for generating the word cloud. The chosen field's data will determine the word frequency and size.",
+    "TOOLTIP_WORD_SOURCE": "Select a picklist or text field as the source for generating the word cloud. The chosen field's data will determine the word size.",
     "TOOLTIP_X_AXIS": "Choose a picklist or datetime field to represent the X-Axis values in the Heatmap visualization.",
     "TOOLTIP_Y_AXIS": "Choose a picklist or datetime field to represent the Y-Axis values in the Heatmap visualization.",
     "TOOLTIP_X_Y_AXIS_DATE_FORMAT": "Select the format for displaying dates. Choose 'Month Year' (e.g., Jan 2025) or 'Month Day' (e.g., Jan 15).",

@@ -37,6 +37,13 @@
         useDirtyRect: false
       });
       $scope.option = undefined;
+      if (dataVisualization_VIZ_TYPES.ACROSS === $scope.config.moduleType && _.contains([dataVisualization_VIZ_MAP_TYPES.SUNBURST, dataVisualization_VIZ_MAP_TYPES.TREE_MAP], $scope.config.vizType)) {
+        $scope.myChart.on('click', function(params) {
+          if (params.name.split(' > ').length === 3) {
+            dataVisualizationService.redirectToModuleListing($scope.config, params, $scope.fields);
+          }
+        });
+      }
       setFilter();
       if ($scope.config.moduleType === dataVisualization_VIZ_TYPES.SINGLE) {
         processStaticChartData();
@@ -194,10 +201,10 @@
       }
       else if ($scope.config.vizType === dataVisualization_VIZ_MAP_TYPES.TREE_MAP) {
        target.children.push({
-         name: basePath,
-         value: source.$count,
-         itemStyle: source.$itemStyle
-       });
+        name: basePath,
+        value: source.$count,
+        itemStyle: source.$itemStyle
+      });
       }
     }
 
@@ -251,6 +258,7 @@
               return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} <span class="padding-left-md">${info.value}</span>`;
             }
           },
+          position: 'inside',
           renderMode: 'html',
           backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
           borderColor: 'rgba(0, 0, 0, 1)',
@@ -319,6 +327,7 @@
                 return `<i class="fa fa-circle padding-right-sm" style="color: ${info.color};"></i>${info.name} <span class="padding-left-md">${info.value}</span>`;
               }
             },
+            position: 'inside',
             renderMode: 'html',
             backgroundColor: 'light' === $scope.themeId ? 'rgba(236, 232, 232, 0.8)' : 'rgba(0, 0, 0, 0.8)',
             borderColor: 'rgba(0, 0, 0, 1)',

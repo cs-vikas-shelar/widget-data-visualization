@@ -9,9 +9,9 @@
         .module('cybersponse')
         .factory('dataVisualizationService', dataVisualizationService);
 
-    dataVisualizationService.$inject = ['$q', '$http', 'Query', 'API', 'ALL_RECORDS_SIZE', 'WIDGET_BASE_PATH', 'dataVisualization_VIZ_MAP_TYPES'];
+    dataVisualizationService.$inject = ['$q', '$http', 'Query', 'API', 'ALL_RECORDS_SIZE', 'WIDGET_BASE_PATH', 'dataVisualization_VIZ_MAP_TYPES', '_', '$state'];
 
-    function dataVisualizationService($q, $http, Query, API, ALL_RECORDS_SIZE, WIDGET_BASE_PATH, dataVisualization_VIZ_MAP_TYPES) {
+    function dataVisualizationService($q, $http, Query, API, ALL_RECORDS_SIZE, WIDGET_BASE_PATH, dataVisualization_VIZ_MAP_TYPES, _, $state) {
         var service;
         var config;
         var fileCount = 0;
@@ -19,10 +19,10 @@
 
         service = {
             loadJs: loadJs,
+            loadVisualizationType: loadVisualizationType,
             fetchLiveData: fetchLiveData,
             fetchStaticData: fetchStaticData,
-            loadVisualizationType: loadVisualizationType,
-            getDateFormat: getDateFormat
+            redirectToModuleListing: redirectToModuleListing,
         };
 
         // Load CDN JS files
@@ -58,6 +58,68 @@
             });
 
             return defer.promise;
+        }
+
+        function _getObjectUuid(availableOptions, data, field) {
+            return _.pluck(_.filter(availableOptions[field], (option) => { return option.itemValue === data }), 'uuid');
+        }
+
+        // TODO: Generic operations to handle LookUp filters
+        function _loadLookupRecordUuid(moduleName) {
+            return $http.get(`${API.API_3_BASE}${moduleName}`);
+        }
+
+        function _createFilter(config, params, availableOptions, tenantList) {
+            let query = new Query();
+            let widgetQuery = new Query();
+            switch(params.seriesType) {
+                case dataVisualization_VIZ_MAP_TYPES.SUNBURST:
+                case dataVisualization_VIZ_MAP_TYPES.TREE_MAP: 
+                {
+                    let dataValues = params.name.split(' > ');
+                    dataValues.forEach((data, index) => {
+                        if (_.contains(['picklist'], config.sunTree.mappingLevel[index].type)) {
+                            widgetQuery.filters.push({
+                                field: config.sunTree.mappingLevel[index].name,
+                                type: config.sunTree.mappingLevel[index].type,
+                                operator: 'in',
+                                value: _getObjectUuid(availableOptions, data, config.sunTree.mappingLevel[index].name)
+                            });
+                        } else {
+                            widgetQuery.filters.push({
+                                field: config.sunTree.mappingLevel[index].name,
+                                operator: 'eq',
+                                value: _.pick(_.filter(tenantList, (tenant) => { return tenant.name === data })[0], 'uuid').uuid
+                            });
+                        }
+                    });
+                }
+                    break;
+            }
+            query.widgetQuery = widgetQuery;
+            $state.go('main.modules.list', {
+                module: config.resource,
+                query: encodeURIComponent(JSON.stringify(query))
+            });
+        }
+
+        function redirectToModuleListing(config, params, fields) {
+            let availableOptions = {};
+            let isLookUpAvailable = false;
+            (config.sunTree.mappingLevel).forEach((mapLevel) => {
+                if ((['picklist']).indexOf(fields[mapLevel.name].type) > -1) {
+                    availableOptions[mapLevel.name] = fields[mapLevel.name].options;
+                } else {
+                    isLookUpAvailable = true;
+                }
+            });
+            if (isLookUpAvailable) {
+                _loadLookupRecordUuid('tenants').then(function(lookUpData) {
+                    _createFilter(config, params, availableOptions, lookUpData.data['hydra:member']);
+                });
+            } else {
+                _createFilter(config, params, availableOptions);
+            }
         }
 
         function fetchLiveData(_config) {
@@ -175,22 +237,6 @@
 
         function loadVisualizationType() {
             return $http.get(`${WIDGET_BASE_PATH.INSTALLED}dataVisualization-1.0.0/widgetAssets/json/vizTypes.json`);
-        }
-
-        function getDateFormat(timeScope) {
-            var format;
-            switch (timeScope) {
-                case 'day':
-                format = 'yyyy-MM-dd';
-                break;
-
-                default:
-                case 'month':
-                format = 'yyyy-MM-01';
-                break;
-            }
-
-            return format;
         }
 
         return service;
