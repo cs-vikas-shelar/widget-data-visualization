@@ -121,7 +121,7 @@
         };
       }
 
-      if(CommonUtils.isUndefined($scope.config.heatmap)) {
+      if(CommonUtils.isUndefined($scope.config.heatMap)) {
         $scope.config.heatMap = {
           minColor: '#f6efa6',
           maxColor: '#bf444c'
