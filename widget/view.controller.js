@@ -336,11 +336,21 @@
               color: 'light' === $scope.themeId ? 'rgba(0, 0, 0, 0.8)' : 'rgba(236, 232, 232, 0.8)'
             }
           },
+          breadcrumb: {
+            itemStyle: {
+              textStyle: {
+                width: '150',
+                overflow: 'truncate',
+                ellipsis: '..'
+              }
+            }
+          },
           series: [
             {
               name: 'Base',
               type: 'treemap',
               visibleMin: 300,
+              roam: false,
               data: data.children,
               leafDepth: 2,
               levels: [
@@ -555,7 +565,13 @@
           calculable: true,
           orient: 'horizontal',
           left: 'center',
-          bottom: '15%'
+          bottom: '15%',
+          inRange: {
+            color: [
+              _config.heatMap.minColor, 
+              _config.heatMap.maxColor
+            ]
+          }
         },
         series: [
           {
