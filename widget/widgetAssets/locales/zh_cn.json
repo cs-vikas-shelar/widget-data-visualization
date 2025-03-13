@@ -27,7 +27,7 @@
     "TOOLTIP_RESOURCE": "选择包含要可视化记录的模块。",
     "TOOLTIP_SELECT_JSON_FIELD": "选择包含数据的字段，只有 JSON 类型的字段会显示在下拉菜单中。",
     "TOOLTIP_STATIC_DATA": "允许您选择模块内的单个 JSON 记录。",
-    "TOOLTIP_WORD_SOURCE": "选择一个选择列表或文本字段作为生成词云的来源。所选字段的数据将决定单词的频率和大小。",
+    "TOOLTIP_WORD_SOURCE": "请选择一个选项列表或文本字段作为生成词云的来源。所选字段的数据将决定单词的大小。",
     "TOOLTIP_X_AXIS": "选择用于表示热图可视化 X 轴值的选择列表或日期时间字段。",
     "TOOLTIP_Y_AXIS": "选择用于表示热图可视化 Y 轴值的选择列表或日期时间字段。",
     "TOOLTIP_X_Y_AXIS_DATE_FORMAT": "选择日期显示格式。可选“月份 年份”（如：2025年1月）或“月份 日期”（如：1月15日）。",
