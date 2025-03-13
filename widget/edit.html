@@ -225,6 +225,23 @@
                         <div data-cs-messages="editDataVisualizationForm.yAxisDateFormat"></div>
                     </div>
                 </div>
+                <div class="form-group padding-top-sm">
+                    <label class="control-label">{{ viewWidgetVars.LABEL_COLOR_THRESHOLD }}</label>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <label class="control-label">{{ viewWidgetVars.LABEL_COLOR_MIN }}</label><br/>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-center margin-top-6">
+                                <button class="btn btn-sq" type="button" colorpicker="hex" colorpicker-with-input="true" colorpicker-position="top" data-ng-model="config.heatMap.minColor" type="text" data-ng-style="{ 'background-color': config.heatMap.minColor }"></button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">{{ viewWidgetVars.LABEL_COLOR_MAX }}</label><br/>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-center margin-top-6">
+                                <button class="btn btn-sq" type="button" colorpicker="hex" colorpicker-with-input="true" colorpicker-position="top" data-ng-model="config.heatMap.maxColor" type="text" data-ng-style="{ 'background-color': config.heatMap.maxColor }"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

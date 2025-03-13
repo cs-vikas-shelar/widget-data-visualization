@@ -46,6 +46,9 @@
             BTN_CLOSE: widgetUtilityService.translate('dataVisualization.BTN_CLOSE'),
             BTN_SAVE: widgetUtilityService.translate('dataVisualization.BTN_SAVE'),
             HEADER_EDIT_DATA_VISUALIZATION: widgetUtilityService.translate('dataVisualization.HEADER_EDIT_DATA_VISUALIZATION'),
+            LABEL_COLOR_MAX: widgetUtilityService.translate('dataVisualization.LABEL_COLOR_MAX'),
+            LABEL_COLOR_MIN: widgetUtilityService.translate('dataVisualization.LABEL_COLOR_MIN'),
+            LABEL_COLOR_THRESHOLD: widgetUtilityService.translate('dataVisualization.LABEL_COLOR_THRESHOLD'),
             LABEL_DATA_SOURCE: widgetUtilityService.translate('dataVisualization.LABEL_DATA_SOURCE'),
             LABEL_FILTER_CRITERIA: widgetUtilityService.translate('dataVisualization.LABEL_FILTER_CRITERIA'),
             LABEL_LEVEL_COUNT: widgetUtilityService.translate('dataVisualization.LABEL_LEVEL_COUNT'),
@@ -115,6 +118,13 @@
       if(CommonUtils.isUndefined($scope.config.sunTree)) {
         $scope.config.sunTree = {
           mappingLevel: Array(maxLevel).fill(null)
+        };
+      }
+
+      if(CommonUtils.isUndefined($scope.config.heatmap)) {
+        $scope.config.heatMap = {
+          minColor: '#f6efa6',
+          maxColor: '#bf444c'
         };
       }
 
