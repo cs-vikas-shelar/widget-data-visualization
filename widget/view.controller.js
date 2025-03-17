@@ -22,7 +22,34 @@
       widgetUtilityService.checkTranslationMode($scope.$parent.model.type).then(function () {
         $scope.viewWidgetVars = {
           // Create your translating static string variables here
+          MSG_NO_RESULTS: widgetUtilityService.translate('dataVisualization.MSG_NO_RESULTS'),
+          MSG_LOADING: widgetUtilityService.translate('dataVisualization.MSG_LOADING'),
         };
+      });
+    }
+
+    function _loadingScreen() {
+      $scope.myChart.showLoading('default', {
+        text: $scope.viewWidgetVars.MSG_LOADING,
+        color: 'light' === $scope.themeId ? '#4d74af' : '#1b2430', 
+        textColor: 'light' === $scope.themeId ? '#000' : '#FFF',
+        maskColor: 'light' === $scope.themeId ? 'rgba(255, 255, 255, 0.8)' : 'rgba(51, 59, 71, 1)',
+        zlevel: 0,
+      
+        // Font size. Available since `v4.8.0`.
+        fontSize: 12,
+        // Show an animated "spinner" or not. Available since `v4.8.0`.
+        showSpinner: true,
+        // Radius of the "spinner". Available since `v4.8.0`.
+        spinnerRadius: 10,
+        // Line width of the "spinner". Available since `v4.8.0`.
+        lineWidth: 5,
+        // Font thick weight. Available since `v5.0.1`.
+        fontWeight: 'normal',
+        // Font style. Available since `v5.0.1`.
+        fontStyle: 'normal',
+        // Font family. Available since `v5.0.1`.
+        fontFamily: 'sans-serif'
       });
     }
 
@@ -36,6 +63,7 @@
         renderer: 'canvas',
         useDirtyRect: false
       });
+      _loadingScreen();
       $scope.option = undefined;
       if (dataVisualization_VIZ_TYPES.ACROSS === $scope.config.moduleType && _.contains([dataVisualization_VIZ_MAP_TYPES.SUNBURST, dataVisualization_VIZ_MAP_TYPES.TREE_MAP], $scope.config.vizType)) {
         $scope.myChart.on('click', function(params) {
@@ -52,18 +80,23 @@
       }
     }
 
+    function _renderNoRecordMessage() {
+      $scope.hideChartCanvas = true;
+      $scope.myChart && echarts.dispose($scope.myChart);
+    }
+
     function processLiveChartData() {
       dataVisualizationService.fetchLiveData(_config).then(function (result) {
         if (result && result['hydra:member']) {
           if (result['hydra:member'].length === 0) {
-            errorMessage = 'No records found!';
-            renderNoRecordMessage();
+            _renderNoRecordMessage();
           }
           else {
             formMapData(result['hydra:member']);
           }
         }
       }).catch(function(error) {
+        $scope.myChart.hideLoading();
         console.log(error);
       });
     }
@@ -72,8 +105,7 @@
       dataVisualizationService.fetchStaticData(_config).then(function (result) {
         if (result && result['hydra:member']) {
           if (result['hydra:member'].length === 0) {
-            errorMessage = 'No records found!';
-            renderNoRecordMessage();
+            _renderNoRecordMessage();
           }
           else {
             var data = result['hydra:member'][0][$scope.config.objectField];
@@ -84,6 +116,9 @@
             }
           }
         }
+      }).catch(function(error) {
+        $scope.myChart.hideLoading();
+        console.log(error);
       });
     }
     /*
@@ -299,7 +334,6 @@
       };
 
       $scope.option && $scope.myChart.setOption($scope.option);
-      $scope.generatingChart = false;
     }
 
     function renderTreemapData(rawData) {
@@ -385,7 +419,6 @@
         })
       );
       $scope.option && $scope.myChart.setOption($scope.option);
-      $scope.generatingChart = false;
     }
 
     function renderWordCloud(rawData) {
@@ -420,7 +453,6 @@
 
       // Render the chart
       $scope.option && $scope.myChart.setOption($scope.option);
-      $scope.generatingChart = false;
     }
 
     /**
@@ -592,7 +624,6 @@
       };
 
       $scope.option && $scope.myChart.setOption($scope.option);
-      $scope.generatingChart = false;
     }
 
     function renderSelectedChart(formedData) {
@@ -610,6 +641,7 @@
           renderHeatmap(formedData);
           break;
       }
+      $scope.myChart.hideLoading();
     }
 
     $scope.init = function() {
@@ -620,7 +652,7 @@
       let define = window.define;
       window.AMDLoader = {};
       window.define = {};
-      $scope.generatingChart = true;
+      $scope.hideChartCanvas = false;
       dataVisualizationService.loadJs(['https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js', 'https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js', 'https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js']).then(function () {
         $timeout(function() {
           window.AMDLoader = loader;

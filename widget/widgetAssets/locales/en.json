@@ -21,6 +21,8 @@
     "LABEL_Y_AXIS": "Y-Axis",
     "LABEL_Y_AXIS_DATE_FORMAT": "Y-Axis Date Format",
     "LABEL_Y_AXIS_DATE_RANGE": "Y-Axis Date Range",
+    "MSG_LOADING": "Loading",
+    "MSG_NO_RESULTS": "No Results",
     "OPT_SELECT_AN_OPTION": "Select an option",
     "RADIO_OPT_LIVE_DATA": "Get Live Data",
     "RADIO_OPT_STATIC_DATA": "Record Containing JSON Data",
