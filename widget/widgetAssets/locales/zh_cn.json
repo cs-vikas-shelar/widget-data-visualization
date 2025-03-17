@@ -21,6 +21,8 @@
     "LABEL_Y_AXIS": "Y 轴",
     "LABEL_Y_AXIS_DATE_FORMAT": "Y 轴日期格式",
     "LABEL_Y_AXIS_DATE_RANGE": "Y 轴日期范围",
+    "MSG_LOADING": "加载中",
+    "MSG_NO_RESULTS": "无结果",
     "OPT_SELECT_AN_OPTION": "选择一个选项",
     "RADIO_OPT_LIVE_DATA": "获取实时数据",
     "RADIO_OPT_STATIC_DATA": "包含 JSON 数据的记录",

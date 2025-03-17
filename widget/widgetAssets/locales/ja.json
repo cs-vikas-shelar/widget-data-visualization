@@ -21,6 +21,8 @@
     "LABEL_Y_AXIS": "Y軸",
     "LABEL_Y_AXIS_DATE_FORMAT": "Y軸の日付形式",
     "LABEL_Y_AXIS_DATE_RANGE": "Y軸の日付範囲",
+    "MSG_LOADING": "読み込み中",
+    "MSG_NO_RESULTS": "結果なし",
     "OPT_SELECT_AN_OPTION": "オプションを選択",
     "RADIO_OPT_LIVE_DATA": "ライブデータを取得",
     "RADIO_OPT_STATIC_DATA": "JSONデータを含むレコード",

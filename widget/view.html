@@ -18,7 +18,10 @@
     <div data-ng-hide="collapsed">
         <div class="padding-left-lg padding-bottom-lg">
             <div class="charts-background fade-in-animation">
-                <div id="eChart-{{ config.wid }}" style="position: relative; max-height:700px;"></div>
+                <div data-ng-show="hideChartCanvas" class="watermark grid-margin ng-binding width-100pt" aria-hidden="false">
+                    {{ viewWidgetVars.MSG_NO_RESULTS }}
+                </div>
+                <div data-ng-show="!hideChartCanvas" id="eChart-{{ config.wid }}" style="position: relative; max-height:700px;"></div>
             </div>
         </div>
     </div>

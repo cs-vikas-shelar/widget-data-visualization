@@ -21,6 +21,8 @@
     "LABEL_Y_AXIS": "Y축",
     "LABEL_Y_AXIS_DATE_FORMAT": "Y축 날짜 형식",
     "LABEL_Y_AXIS_DATE_RANGE": "Y축 날짜 범위",
+    "MSG_LOADING": "로딩 중",
+    "MSG_NO_RESULTS": "결과 없음",
     "OPT_SELECT_AN_OPTION": "옵션 선택",
     "RADIO_OPT_LIVE_DATA": "실시간 데이터 가져오기",
     "RADIO_OPT_STATIC_DATA": "JSON 데이터를 포함한 레코드",
