@@ -96,8 +96,9 @@
           }
         }
       }).catch(function(error) {
-        $scope.myChart.hideLoading();
         console.log(error);
+      }).finally(function() {
+        $scope.myChart.hideLoading();
       });
     }
 
@@ -117,8 +118,9 @@
           }
         }
       }).catch(function(error) {
-        $scope.myChart.hideLoading();
         console.log(error);
+      }).finally(function() {
+        $scope.myChart.hideLoading();
       });
     }
     /*
@@ -644,7 +646,6 @@
           renderHeatmap(formedData);
           break;
       }
-      $scope.myChart.hideLoading();
     }
 
     $scope.init = function() {
