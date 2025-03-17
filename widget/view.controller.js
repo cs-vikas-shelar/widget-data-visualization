@@ -613,6 +613,9 @@
             label: {
               show: true
             },
+            labelLayout: {
+              hideOverlap: true
+            },
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
