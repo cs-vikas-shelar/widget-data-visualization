@@ -670,6 +670,10 @@
       });
     }
 
+    $scope.$on('$destroy', function() {
+      $scope.myChart && echarts.dispose($scope.myChart);
+    });
+
     $scope.init();
   }
 })();
