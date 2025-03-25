@@ -442,11 +442,9 @@
             fontFamily: 'sans-serif',
             fontWeight: 'bold',
             color: function () {
-              return 'rgb(' + [
-                Math.round(Math.random() * 160),
-                Math.round(Math.random() * 160),
-                Math.round(Math.random() * 160)
-              ].join(',') + ')';
+              return $scope.themeId === 'light'
+                ? `rgb(${Math.round(Math.random() * 160)}, ${Math.round(Math.random() * 160)}, ${Math.round(Math.random() * 160)})`
+                : `rgb(${200 + Math.random() * 55}, ${200 + Math.random() * 55}, ${200 + Math.random() * 55})`;
             }
           },
           data: rawData
