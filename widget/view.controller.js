@@ -255,7 +255,9 @@
             <div>`];
       if (levelValues.length > 0) {
         levelValues.forEach(function (value, index) {
-          basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+          if (value !== resourceName) {
+            basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+          }
         });
       }
       basicTemplateArray.push(`</div></div>`);
