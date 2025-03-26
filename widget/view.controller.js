@@ -627,6 +627,7 @@
           calculable: true,
           orient: 'horizontal',
           left: 'center',
+          top: '75%',
           bottom: '15%',
           inRange: {
             color: [
@@ -685,7 +686,7 @@
       window.AMDLoader = {};
       window.define = {};
       $scope.hideChartCanvas = false;
-      dataVisualizationService.loadJs(['https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js', 'https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js', 'https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js']).then(function () {
+      dataVisualizationService.loadJs(['https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js', 'https://cdn.jsdelivr.net/npm/echarts-wordcloud/dist/echarts-wordcloud.min.js']).then(function () {
         $timeout(function() {
           window.AMDLoader = loader;
           window.define = define;
