@@ -341,7 +341,7 @@
      * @param {Array} data - The array of category data objects to be normalized.
      * @returns {Array} - The modified data with adjusted category sizes.
      */
-    function normalizeCategorySize(data) {
+    function _normalizeCategorySize(data) {
       if (!data || data.length === 0 || !data[0].children) return;
 
       data[0].name = resourceName;
@@ -381,7 +381,7 @@
         data[0].children = rawData.children;
       }
       // Handling rendering of small values in the chart
-      normalizeCategorySize(data);
+      _normalizeCategorySize(data);
       $scope.myChart.setOption(
         ($scope.option = {
           tooltip: {
