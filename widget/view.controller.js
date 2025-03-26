@@ -255,7 +255,9 @@
             <div>`];
       if (levelValues.length > 0) {
         levelValues.forEach(function (value, index) {
-          basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+          if (value !== resourceName) {
+            basicTemplateArray.push(`${levelLabels[index]}: ${value}<br/>`);
+          }
         });
       }
       basicTemplateArray.push(`</div></div>`);
@@ -268,6 +270,12 @@
       return basicTemplateArray.join('');
     }
 
+    /**
+     * Processes raw hierarchical data to generate a structured format for Sunburst chart visualization.
+     * This method organizes the input data into a hierarchy suitable for rendering in a Sunburst chart.
+     * 
+     * @param {Array} rawData - The input raw dataset containing hierarchical categories and values.
+     */
     function renderSunburst(rawData) {
       const data = {
         children: []
@@ -313,46 +321,67 @@
           label: {
             rotate: 'tangential', // 'tangential', // 'radial'
             formatter: '{b}\n\n{c}',
-            //position: 'inside',
             width: 30,
             overflow: 'truncate', // 'brake',
             ellipsis: '..',
             minMargin: 5,
-            // color: ('light' === $scope.themeId) ? '#000' : '#fff',
             minAngle: '10' // If the data is less than 10 deg then it doesn't show text
           },
           labelLayout: { hideOverlap: true },
-          // emphasis: {
-          //   label: {
-          //     formatter: '\n{b}\n\n{c}'
-          //   }
-          // },
-          // downplay: {
-          //   label: {
-          //     formatter: '\n{b}\n\n{c}'
-          //   }
-          // }
         }
       };
 
       $scope.option && $scope.myChart.setOption($scope.option);
     }
 
+    /**
+     * Normalizes the category size for small values to ensure better rendering in a Treemap.
+     * This function adjusts the data to make small categories more visually distinguishable.
+     * 
+     * @param {Array} data - The array of category data objects to be normalized.
+     * @returns {Array} - The modified data with adjusted category sizes.
+     */
+    function _normalizeCategorySize(data) {
+      if (!data || data.length === 0 || !data[0].children) return;
+
+      data[0].name = resourceName;
+
+      // Calculate the total base value in a single pass
+      let baseValue = data[0].children.reduce((sum, child) => sum + child.value, 0);
+      data[0].value = baseValue;
+
+      let minValue = Math.round((baseValue * 2) / 100);
+      data[0].children.forEach(child => {
+        if (child.value < minValue) {
+          child.value = minValue;
+        }
+      });
+    }
+
+    /**
+     * Transforms raw hierarchical data into a structured format suitable for Treemap rendering.
+     * This method processes the input data, calculates necessary properties, and ensures 
+     * correct hierarchical representation for visualization.
+     *
+     * @param {Array} rawData - The input raw dataset containing hierarchical categories and values.
+     */
     function renderTreemapData(rawData) {
-      const data = {
+      const data = [{
         children: []
-      };
+      }];
       let levelLabels;
       if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
-        convert(rawData, data, '');
-        data.children = data.children.filter(children => children.name !== '');
+        convert(rawData, data[0], '');
+        data[0].children = data[0].children.filter(children => children.name !== '');
         let mappingArray = _.pluck($scope.config.sunTree.mappingLevel, 'name');
         levelLabels = _.pluck(_.filter($scope.fields, function(field) {
           return (mappingArray).indexOf(field.name) > -1;
         }).sort((a, b) => mappingArray.indexOf(a.name) - mappingArray.indexOf(b.name)), 'title');
       } else {
-        data.children = rawData.children;
+        data[0].children = rawData.children;
       }
+      // Handling rendering of small values in the chart
+      _normalizeCategorySize(data);
       $scope.myChart.setOption(
         ($scope.option = {
           tooltip: {
@@ -385,10 +414,11 @@
             {
               name: 'Base',
               type: 'treemap',
-              visibleMin: 300,
+              visibleMin: 0,
+              visualMin: 1,
               roam: false,
-              data: data.children,
-              leafDepth: 2,
+              data: data,
+              leafDepth: 3,
               levels: [
                 {
                   itemStyle: {
