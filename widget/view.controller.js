@@ -292,6 +292,7 @@
         data.children = rawData.children;
       }
       $scope.option = {
+        backgroundColor: 'transparent',
         textStyle: {
           overflow: 'break'
         },
@@ -384,6 +385,7 @@
       _normalizeCategorySize(data);
       $scope.myChart.setOption(
         ($scope.option = {
+          backgroundColor: 'transparent',
           tooltip: {
             formatter: function (info) {
               if (dataVisualization_VIZ_TYPES.ACROSS === _config.moduleType) {
@@ -456,6 +458,7 @@
     function renderWordCloud(rawData) {
       // Configure the chart
       $scope.option = {
+        backgroundColor: 'transparent',
         title: {
           text: dataVisualization_VIZ_TYPES.SINGLE === _config.moduleType ? '' : resourceName,
           left: 'center'
@@ -581,6 +584,7 @@
       }
 
       $scope.option = {
+        backgroundColor: 'transparent',
         tooltip: {
           position: 'top'
         },
