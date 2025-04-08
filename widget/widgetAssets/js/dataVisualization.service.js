@@ -183,6 +183,18 @@
                     break;
                 case dataVisualization_VIZ_MAP_TYPES.HEAT_MAP:
                     {
+                        if (['datetime'].indexOf(config.heatMap.xAxis.field.type) > -1) {
+                            queryObject.sort.push({
+                                field: config.heatMap.xAxis.field.name,
+                                direction: 'ASC'
+                            });
+                        } 
+                        if (['datetime'].indexOf(config.heatMap.yAxis.field.type) > -1) {
+                            queryObject.sort.push({
+                                field: config.heatMap.yAxis.field.name,
+                                direction: 'ASC'
+                            });
+                        }
                         if (['picklist'].indexOf(config.heatMap.xAxis.field.type) > -1) {
                             queryObject.sort.push({
                                 field: config.heatMap.xAxis.field.name + '.orderIndex',
