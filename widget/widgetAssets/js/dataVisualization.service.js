@@ -183,6 +183,14 @@
                     break;
                 case dataVisualization_VIZ_MAP_TYPES.HEAT_MAP:
                     {
+                        let yAxisSortingAdded = false;
+                        if ([config.heatMap.xAxis.field.type, config.heatMap.yAxis.field.type].indexOf('datetime') === 1) {
+                            queryObject.sort.push({
+                                field: config.heatMap.yAxis.field.name,
+                                direction: 'ASC'
+                            });
+                            yAxisSortingAdded = true;
+                        }
                         if (['picklist'].indexOf(config.heatMap.xAxis.field.type) > -1) {
                             queryObject.sort.push({
                                 field: config.heatMap.xAxis.field.name + '.orderIndex',
@@ -193,7 +201,13 @@
                                 alias: 'orderIndex',
                                 field: config.heatMap.xAxis.field.name + '.orderIndex'
                             });
-                        } else if (['picklist'].indexOf(config.heatMap.yAxis.field.type) > -1) {
+                        } else {
+                            queryObject.sort.push({
+                                field: config.heatMap.xAxis.field.name,
+                                direction: 'ASC'
+                            });
+                        } 
+                        if (['picklist'].indexOf(config.heatMap.yAxis.field.type) > -1) {
                             queryObject.sort.push({
                                 field: config.heatMap.yAxis.field.name + '.orderIndex',
                                 direction: 'ASC'
@@ -202,6 +216,11 @@
                                 operator: 'groupby',
                                 alias: 'orderIndex',
                                 field: config.heatMap.yAxis.field.name + '.orderIndex'
+                            });
+                        } else if (!yAxisSortingAdded) {
+                            queryObject.sort.push({
+                                field: config.heatMap.yAxis.field.name,
+                                direction: 'ASC'
                             });
                         }
                         queryObject.aggregates.push({
